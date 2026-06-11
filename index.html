@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frostbite: 극지 생존</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts: Noto Sans KR for Korean, Montserrat for headers -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <!-- 시작 화면 -->
+    <div id="start-screen" class="screen active">
+        <div class="glass-card start-card">
+            <h1 class="game-title">FROSTBITE</h1>
+            <p class="game-subtitle">극지 생존기</p>
+            <div class="divider"></div>
+            <p class="game-desc">
+                끝없는 눈보라와 매서운 추위가 몰아치는 고립된 극지대.<br>
+                당신은 구조대가 올 때까지 살아남아야 합니다.<br>
+                자원을 탐색하고, 도구를 제작하며, 시시각각 찾아오는 위협에 대처하십시오.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 280px; margin: 0 auto;">
+                <button id="start-btn" class="btn btn-primary" style="width: 100%;">생존 시작하기</button>
+                <div style="display: flex; gap: 8px; width: 100%;">
+                    <button id="start-archive-btn" class="btn btn-small btn-info" style="flex: 1; font-weight: 700;">📖 아카이브</button>
+                    <button id="start-import-btn" class="btn btn-small btn-secondary" style="flex: 1; font-weight: 700;">📂 복구(.js)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 게임 화면 -->
+    <div id="game-screen" class="screen">
+        <header class="game-header">
+            <div class="header-left">
+                <span class="logo">FROSTBITE</span>
+            </div>
+            <div class="header-right" style="display: flex; align-items: center; gap: 8px;">
+                <div class="day-counter" style="margin-right: 4px;">SURVIVED: <span id="day-val">1</span> DAY</div>
+                <button id="archive-btn" class="btn btn-small btn-info" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 700;">📖 아카이브</button>
+                <button id="export-save-btn" class="btn btn-small btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.05) !important;">💾 백업(.js)</button>
+                <button id="import-save-btn" class="btn btn-small btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.05) !important;">📂 복구(.js)</button>
+                <input type="file" id="save-file-input" accept=".js" style="display: none;">
+                <button id="reset-btn" class="btn btn-small btn-danger" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 700; background: linear-gradient(135deg, var(--color-danger) 0%, #c0392b 100%) !important;">🔄 리셋</button>
+            </div>
+        </header>
+
+        <main class="game-container">
+            <!-- 왼쪽: 상태 수치 & 주요 행동 -->
+            <section class="left-panel">
+                <!-- 상태 카드 -->
+                <div class="glass-card stats-card">
+                    <h2 class="section-title">생존 상태</h2>
+                    
+                    <div class="stat-group" id="stat-health">
+                        <div class="stat-info">
+                            <span class="stat-name"><i class="icon">❤️</i> 체력</span>
+                            <span class="stat-value" id="health-txt">100/100</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar health-bar" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-group" id="stat-defense" style="margin-top: 6px; margin-bottom: 12px;">
+                        <div class="stat-info">
+                            <span class="stat-name"><i class="icon">🛡️</i> 방어력</span>
+                            <span class="stat-value" id="defense-txt">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-group" id="stat-warmth">
+                        <div class="stat-info">
+                            <span class="stat-name"><i class="icon">🔥</i> 체온</span>
+                            <span class="stat-value" id="warmth-txt">100/100</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar warmth-bar" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-group" id="stat-hunger">
+                        <div class="stat-info">
+                            <span class="stat-name"><i class="icon">🍖</i> 포만감</span>
+                            <span class="stat-value" id="hunger-txt">100/100</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar hunger-bar" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-group" id="stat-sanity">
+                        <div class="stat-info">
+                            <span class="stat-name"><i class="icon">🧠</i> 정신력</span>
+                            <span class="stat-value" id="sanity-txt">100/100</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar sanity-bar" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 장비 카드 -->
+                <div class="glass-card equipment-card">
+                    <h2 class="section-title">장비 장착</h2>
+                    <div class="equipment-grid">
+                        <div class="equip-slot" id="equip-head" data-slot="head">
+                            <span class="equip-slot-name">머리</span>
+                            <span class="equip-slot-icon">🪖</span>
+                        </div>
+                        <div class="equip-slot" id="equip-body" data-slot="body">
+                            <span class="equip-slot-name">몸</span>
+                            <span class="equip-slot-icon">🧥</span>
+                        </div>
+                        <div class="equip-slot" id="equip-legs" data-slot="legs">
+                            <span class="equip-slot-name">다리</span>
+                            <span class="equip-slot-icon">👖</span>
+                        </div>
+                        <div class="equip-slot" id="equip-feet" data-slot="feet">
+                            <span class="equip-slot-name">신발</span>
+                            <span class="equip-slot-icon">🥾</span>
+                        </div>
+                        <div class="equip-slot" id="equip-bag" data-slot="bag">
+                            <span class="equip-slot-name">가방</span>
+                            <span class="equip-slot-icon">🎒</span>
+                        </div>
+                        <div class="equip-slot" id="equip-journal-0" data-slot="journal" data-idx="0">
+                            <span class="equip-slot-name">일지1</span>
+                            <span class="equip-slot-icon">📖</span>
+                        </div>
+                        <div class="equip-slot" id="equip-journal-1" data-slot="journal" data-idx="1">
+                            <span class="equip-slot-name">일지2</span>
+                            <span class="equip-slot-icon">📖</span>
+                        </div>
+                        <div class="equip-slot" id="equip-journal-2" data-slot="journal" data-idx="2">
+                            <span class="equip-slot-name">일지3</span>
+                            <span class="equip-slot-icon">📖</span>
+                        </div>
+                        <div class="equip-slot hidden" id="equip-journal-3" data-slot="journal" data-idx="3">
+                            <span class="equip-slot-name">일지4</span>
+                            <span class="equip-slot-icon">📖</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 기본 행동 카드 -->
+                <div class="glass-card action-card">
+                    <h2 class="section-title">일일 행동</h2>
+                    <p class="action-desc">행동을 선택하면 시간이 흐르고 새로운 상황이 발생합니다.</p>
+                    <div class="action-buttons">
+                        <button id="action-forage" class="btn btn-action">
+                            <span class="btn-icon">❄️</span>
+                            <span class="btn-text">
+                                <strong>주변 탐색</strong>
+                                <small>체온 -15, 포만감 -15 | 아이템 획득</small>
+                            </span>
+                        </button>
+                        <button id="action-rest" class="btn btn-action">
+                            <span class="btn-icon">⛺</span>
+                            <span class="btn-text">
+                                <strong>안전 휴식</strong>
+                                <small>체온 +10, 정신력 +10, 체력 회복</small>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 동료 펫 카드 -->
+                <div class="glass-card pet-card">
+                    <h2 class="section-title">동료 펫</h2>
+                    <div id="pet-list" class="pet-list">
+                        <p class="no-pets-desc">아직 동료 펫이 없습니다.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 중앙: 이벤트 출력창 -->
+            <section class="center-panel">
+                <div class="glass-card event-card">
+                    <div class="event-image-container">
+                        <div class="event-day-badge">DAY <span id="event-day-num">1</span></div>
+                        <div class="event-overlay"></div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title" id="event-title">고요한 시작</h3>
+                        <p class="event-description" id="event-desc">
+                            비행기 추락 사고에서 기적적으로 살아남았습니다. 사방은 차가운 눈과 얼음뿐입니다. 
+                            멀리서 칼바람 소리가 들려옵니다. 구조대가 오기 전까지 이곳에서 살아남아야 합니다.
+                        </p>
+                        <div class="event-options" id="event-options">
+                            <!-- JS를 통해 동적 생성 -->
+                            <button class="btn btn-option">주변을 살펴본다.</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 오른쪽: 인벤토리 및 제작 -->
+            <section class="right-panel">
+                <!-- 인벤토리 -->
+                <div class="glass-card inventory-card">
+                    <h2 class="section-title">배낭 (<span id="inv-count">0</span>/15)</h2>
+                    <div class="inventory-grid" id="inventory-list">
+                        <!-- JS로 동적 렌더링 -->
+                    </div>
+                    <div class="item-detail-panel hidden" id="item-detail">
+                        <h4 id="detail-name">아이템 이름</h4>
+                        <p id="detail-desc">설명</p>
+                        <div class="detail-actions">
+                            <button id="detail-use-btn" class="btn btn-small btn-primary">사용</button>
+                            <button id="detail-close-btn" class="btn btn-small btn-secondary">닫기</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 제작 조합 -->
+                <div class="glass-card crafting-card">
+                    <h2 class="section-title">생존 도구 제작</h2>
+                    <div class="crafting-list" id="crafting-list">
+                        <!-- JS로 동적 렌더링 -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 전투 화면 -->
+    <div id="combat-screen" class="screen">
+        <div class="glass-card combat-card">
+            <h1 class="combat-title">⚠️ 전투 돌입!</h1>
+            
+            <!-- 적 정보 -->
+            <div class="combat-monster-area">
+                <div class="monster-info">
+                    <span id="monster-icon" class="monster-icon">🐺</span>
+                    <span id="monster-name" class="monster-name">굶주린 늑대</span>
+                </div>
+                <div class="progress-bar-container monster-hp-container">
+                    <div id="monster-hp-bar" class="progress-bar health-bar" style="width: 100%;"></div>
+                </div>
+                <div id="monster-hp-txt" class="monster-hp-txt">HP: 100/100</div>
+            </div>
+
+            <!-- 전투 로그 -->
+            <div id="combat-log" class="combat-log">
+                <p>야생동물이 으르렁거리며 당신을 노려봅니다...</p>
+            </div>
+
+            <!-- 플레이어 및 펫 정보 -->
+            <div class="combat-allies-area">
+                <div class="combat-player-info">
+                    <strong>플레이어</strong>
+                    <div class="progress-bar-container">
+                        <div id="combat-player-hp-bar" class="progress-bar health-bar" style="width: 100%;"></div>
+                    </div>
+                    <span id="combat-player-hp-txt">HP: 100/100</span>
+                </div>
+                
+                <div class="combat-pet-info hidden" id="combat-active-pet-info">
+                    <strong id="combat-pet-name">펫 이름</strong>
+                    <div class="progress-bar-container">
+                        <div id="combat-pet-hp-bar" class="progress-bar health-bar" style="width: 100%;"></div>
+                    </div>
+                    <span id="combat-pet-hp-txt">HP: 50/50</span>
+                </div>
+            </div>
+
+            <!-- 전투 액션 버튼 -->
+            <div class="combat-actions">
+                <button id="combat-btn-attack" class="btn btn-primary">직접 공격</button>
+                <button id="combat-btn-pet-attack" class="btn btn-accent hidden">펫 공격 명령</button>
+                <button id="combat-btn-pet-skill" class="btn btn-accent hidden" style="background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%) !important;">⚡ 펫 각성 스킬</button>
+                <button id="combat-btn-snowball" class="btn btn-info">❄️ 눈뭉치 던지기</button>
+                <button id="combat-btn-item" class="btn btn-secondary">아이템 사용</button>
+                <button id="combat-btn-escape" class="btn btn-danger">도망치기 (허기 -20)</button>
+            </div>
+            
+            <!-- 전투 전용 아이템 리스트 오버레이 -->
+            <div id="combat-item-selector" class="combat-item-selector hidden">
+                <h3>회복 아이템 선택</h3>
+                <div id="combat-item-list" class="combat-item-list"></div>
+                <button id="combat-item-close" class="btn btn-small btn-secondary" style="margin-top: 10px; width: 100%;">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 연구(생각하기) 레시피 선택기 오버레이 -->
+    <div id="research-selector-modal" class="combat-item-selector hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 350px; background: rgba(10, 15, 30, 0.95); border: 1px solid var(--color-primary); border-radius: 10px; padding: 20px; z-index: 100;">
+        <h3>도안 생각하기 (연구)</h3>
+        <p style="font-size:0.75rem; text-align:center; margin-bottom:12px; color:var(--color-text-sub); line-height:1.4;">재료종류 반절 이상을 보유한 잠긴 도안 목록입니다.<br>도출 시 정신력 -8, 허기 -5가 소모됩니다.</p>
+        <div id="research-item-list" class="combat-item-list" style="max-height: 200px; overflow-y: auto;"></div>
+        <button id="research-close-btn" class="btn btn-small btn-secondary" style="margin-top: 12px; width: 100%;">취소</button>
+    </div>
+
+    <!-- 배낭 공간 부족 교체/버리기 모달 -->
+    <div id="discard-selector-modal" class="combat-item-selector hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 350px; background: rgba(10, 15, 30, 0.95); border: 1px solid var(--color-danger); border-radius: 10px; padding: 20px; z-index: 100;">
+        <h3 id="discard-modal-title" style="color: var(--color-danger);">배낭 공간 부족</h3>
+        <p id="discard-modal-desc" style="font-size:0.75rem; text-align:center; margin-bottom:12px; color:var(--color-text-sub); line-height:1.4;">
+            배낭에 공간이 없습니다. 버릴 물건을 선택하세요.
+        </p>
+        <div id="discard-backpack-list" class="combat-item-list" style="max-height: 200px; overflow-y: auto; margin-bottom: 12px;">
+            <!-- 인벤토리 내 버릴 아이템 목록이 동적으로 렌더링됨 -->
+        </div>
+        <button id="discard-giveup-btn" class="btn btn-small btn-secondary" onclick="giveupPendingItem()" style="width: 100%;">이 아이템 획득 포기하기</button>
+    </div>
+
+    <!-- 극지 상인 거래 모달 -->
+    <div id="merchant-selector-modal" class="combat-item-selector hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 420px; max-height: 85%; background: rgba(10, 15, 30, 0.98); border: 2px solid var(--color-primary); border-radius: 12px; padding: 20px; z-index: 100; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h3 style="color: var(--color-primary); margin: 0; font-size: 1.1rem; text-align: left;">🤝 극지 상인의 교역소</h3>
+            <button id="merchant-modal-close-x" style="background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--color-text-sub); transition: var(--transition-smooth);" onmouseover="this.style.color='#fff';" onmouseout="this.style.color='var(--color-text-sub)';">❌</button>
+        </div>
+        <p id="merchant-gold-info" style="font-size:0.85rem; text-align:center; margin-bottom:12px; color:var(--color-accent); font-weight: 700; background: rgba(255, 255, 255, 0.03); padding: 4px; border-radius: 4px; border: 1px solid var(--border-glass);">보유 골드: 0 G</p>
+        
+        <!-- 탭 구조 -->
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+            <button id="merchant-tab-buy" class="btn btn-small btn-primary" style="flex: 1; font-weight:700;">물건 구매</button>
+            <button id="merchant-tab-sell" class="btn btn-small btn-secondary" style="flex: 1; font-weight:700;">물건 판매</button>
+        </div>
+        
+        <!-- 품목 리스트 -->
+        <div id="merchant-item-list" class="combat-item-list" style="flex: 1; max-height: 250px; overflow-y: auto;">
+            <!-- 구매/판매 목록 동적 렌더링 -->
+        </div>
+        
+        <button id="merchant-close-btn" class="btn btn-small btn-danger" style="margin-top: 12px; width: 100%;">❌ 상점 나가기 (거래 마치기)</button>
+    </div>
+    
+    <!-- 아카이브 (도감 / 도전과제) 모달 -->
+    <div id="archive-modal" class="combat-item-selector hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; max-height: 85%; background: rgba(10, 15, 30, 0.98); border: 2px solid var(--color-primary); border-radius: 12px; padding: 20px; z-index: 110; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h3 style="color: var(--color-primary); margin: 0; font-size: 1.1rem; text-align: left;">📖 극지 생존 기록 보관소 (아카이브)</h3>
+            <button id="archive-modal-close-x" style="background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--color-text-sub); transition: var(--transition-smooth);" onmouseover="this.style.color='#fff';" onmouseout="this.style.color='var(--color-text-sub)';">❌</button>
+        </div>
+        <p style="font-size:0.75rem; color:var(--color-text-sub); margin-bottom:12px; line-height:1.4; text-align:center;">도전과제 달성 및 여러 생존 회차를 통틀어 발견한 아이템, 장비, 펫, 괴수 정보를 기록합니다.</p>
+        
+        <!-- 아카이브 탭 -->
+        <div class="archive-tabs" style="display: flex; gap: 4px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px;">
+            <button class="btn btn-small archive-tab-btn active" data-tab="achievements" style="flex: 1; padding: 6px 4px; font-size:0.72rem; min-width: 70px;">🏆 도전과제</button>
+            <button class="btn btn-small archive-tab-btn" data-tab="items" style="flex: 1; padding: 6px 4px; font-size:0.72rem; min-width: 70px;">🎒 아이템</button>
+            <button class="btn btn-small archive-tab-btn" data-tab="equipments" style="flex: 1; padding: 6px 4px; font-size:0.72rem; min-width: 70px;">🛡️ 장비</button>
+            <button class="btn btn-small archive-tab-btn" data-tab="recipes" style="flex: 1; padding: 6px 4px; font-size:0.72rem; min-width: 70px;">📟 제작법</button>
+            <button class="btn btn-small archive-tab-btn" data-tab="creatures" style="flex: 1; padding: 6px 4px; font-size:0.72rem; min-width: 70px;">🐾 생물/적</button>
+        </div>
+        
+        <!-- 아카이브 본문 스크롤 영역 -->
+        <div id="archive-content-list" class="combat-item-list" style="flex: 1; max-height: 300px; overflow-y: auto; padding-right: 4px;">
+            <!-- JS 동적 렌더링 -->
+        </div>
+        
+        <button id="archive-close-btn" class="btn btn-small btn-secondary" style="margin-top: 12px; width: 100%;">닫기</button>
+    </div>
+
+    <!-- 게임오버 및 승리 화면 -->
+    <div id="end-screen" class="screen">
+        <div class="glass-card end-card">
+            <h1 class="end-title" id="end-title">사망하였습니다</h1>
+            <p class="end-subtitle" id="end-reason">혹독한 추위에 저체온증으로 얼어붙었습니다.</p>
+            <div class="end-stats">
+                <div class="end-stat-box">
+                    <span class="label">생존 일수</span>
+                    <span class="value" id="end-days">0 Days</span>
+                </div>
+            </div>
+            <button id="restart-btn" class="btn btn-primary">다시 도전하기</button>
+        </div>
+    </div>
+
+    <!-- 로깅/알림 토스트 -->
+    <div id="toast-container"></div>
+
+    <script src="events.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
