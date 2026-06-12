@@ -1,32 +1,64 @@
 // Frostbite: Game Core Logic
 
+// 아이템 아이콘/이미지 HTML 반환 헬퍼
+function getItemIconHtml(item, size = "2.2rem") {
+  if (item && item.image) {
+    return `<img src="${item.image}" alt="${item.name}" class="item-img-icon" style="width: ${size}; height: ${size};" />`;
+  }
+  return item ? item.icon : "📦";
+}
+
 // 아이템 데이터베이스 정의
 const ITEM_DATABASE = {
   // 기본 재료
-  wood: { name: "나뭇가지", icon: "🪵", desc: "불을 피우거나 도구를 만드는 데 쓰이는 마른 나뭇가지.", usable: false, type: "재료" },
-  matches: { name: "성냥", icon: "✨", desc: "불을 붙이거나 불빛 신호를 보내는 데 사용되는 필수 도구.", usable: false, type: "재료" },
-  snow: { name: "눈뭉치", icon: "❄️", desc: "오염되지 않은 얼어붙은 눈. 끓여서 깨끗한 물로 만들 수 있다.", usable: false, type: "재료" },
+  wood: { name: "나뭇가지", icon: "🪵", image: "images/wood.png", desc: "불을 피우거나 도구를 만드는 데 쓰이는 마른 나뭇가지.", usable: false, type: "재료" },
+  matches: { name: "성냥", icon: "✨", image: "images/matches.png", desc: "불을 붙이거나 불빛 신호를 보내는 데 사용되는 필수 도구.", usable: false, type: "재료" },
+  snow: { name: "눈뭉치", icon: "❄️", image: "images/snow.png", desc: "오염되지 않은 얼어붙은 눈. 끓여서 깨끗한 물로 만들 수 있다.", usable: false, type: "재료" },
   water: { name: "깨끗한 물", icon: "💧", desc: "눈을 끓여 만든 안전한 식수. 포만감과 체온을 미량 회복시킨다.", usable: true, effect: { hunger: 10, warmth: 15, health: 5, sanity: 5 }, type: "음식" },
   raw_meat: { name: "생고기", icon: "🥩", desc: "야생동물에게서 얻은 날고기. 그냥 먹으면 탈이 날 위험이 큽니다.", usable: true, effect: { hunger: 15, health: -10, warmth: -5, sanity: -10 }, type: "음식" },
   cooked_meat: { name: "구운 고기", icon: "🍖", desc: "불에 노릇하게 구워낸 고기. 든든하게 배를 채우고 체력을 줍니다.", usable: true, effect: { hunger: 45, health: 15, warmth: 10, sanity: 10 }, type: "음식" },
-  hide: { name: "짐승 가죽", icon: "🐺", desc: "야생동물의 털가죽. 텐트나 방한용 피복의 주원료.", usable: false, type: "재료" },
-  metal: { name: "고철 조각", icon: "🔩", desc: "난파선이나 기지 잔해에서 뜯어낸 튼튼한 쇳조각.", usable: false, type: "재료" },
-  herb: { name: "약초", icon: "🌿", desc: "추위를 견디며 자란 희귀한 치료 풀잎. 직접 섭취하여 가볍게 치유합니다.", usable: true, effect: { health: 10, sanity: 5 }, type: "음식" },
-  cloth: { name: "깨끗한 천", icon: "🧣", desc: "기지 시트나 찢어진 옷감에서 나온 단열용 천 조각.", usable: false, type: "재료" },
+  hide: { name: "짐승 가죽", icon: "🐺", image: "images/hide.png", desc: "야생동물의 털가죽. 텐트나 방한용 피복의 주원료.", usable: false, type: "재료" },
+  metal: { name: "고철 조각", icon: "🔩", image: "images/metal.png", desc: "난파선이나 기지 잔해에서 뜯어낸 튼튼한 쇳조각.", usable: false, type: "재료" },
+  herb: { name: "약초", icon: "🌿", image: "images/herb.png", desc: "추위를 견디며 자란 희귀한 치료 풀잎. 상처를 가볍게 치유합니다.", usable: true, effect: { health: 10, sanity: 5 }, type: "의료품" },
+  herb_tea: { name: "약초 달인 차", icon: "🍵", desc: "약초와 깨끗한 물을 끓여 만든 따뜻한 차. 체온과 정신력을 회복시킵니다.", usable: true, effect: { warmth: 25, sanity: 20, health: 10 }, type: "음식" },
+  cloth: { name: "깨끗한 천", icon: "🧣", image: "images/cloth.png", desc: "기지 시트나 찢어진 옷감에서 나온 단열용 천 조각.", usable: false, type: "재료" },
   
   // 특수 제작 소모품
-  campfire: { name: "모닥불", icon: "🔥", desc: "땔감으로 활활 타오르는 화로. 들고 다니며 즉시 체온을 대폭 회복합니다.", usable: true, effect: { warmth: 45, sanity: 15 }, type: "음식" },
-  spear: { name: "철제 창", icon: "🔱", desc: "맹수 사냥 및 호신용 창. 전투 시 플레이어 공격력 +15.", usable: false, type: "중요" },
+  campfire: { name: "모닥불", icon: "🔥", desc: "땔감으로 활활 타오르는 화로. 들고 다니며 즉시 체온을 대폭 회복합니다.", usable: true, effect: { warmth: 45, sanity: 15 }, type: "소모품" },
+  spear: { name: "철제 창", icon: "🔱", desc: "맹수 사냥 및 호신용 창. 전투 시 플레이어 공격력 +25.", usable: false, type: "무기", atk: 25 },
   tent: { name: "간이 텐트", icon: "⛺", desc: "소지하고 있을 때 '안전 휴식'의 효율을 대폭 증대시켜 줍니다. (영구 보관)", usable: false, type: "중요" },
-  medkit: { name: "구급상자", icon: "➕", desc: "소독약과 붕대, 진통제가 들어있는 의료 상자. 체력을 크게 회복합니다.", usable: true, effect: { health: 50, sanity: 20 }, type: "음식" },
+  medkit: { name: "구급상자", icon: "➕", desc: "소독약과 붕대, 진통제가 들어있는 의료 상자. 체력을 크게 회복합니다.", usable: true, effect: { health: 50, sanity: 20 }, type: "의료품" },
 
   // 신규 재료 아이템
-  wire: { name: "구리선", icon: "🔌", desc: "기계 장치나 케이블에서 추출한 피복 전선.", usable: false, type: "재료" },
-  flint: { name: "부싯돌", icon: "🪨", desc: "단단하게 굳어 날카로운 불꽃을 일으킬 수 있는 돌멩이.", usable: false, type: "재료" },
-  coal: { name: "석탄", icon: "🌑", desc: "화력이 매우 강하고 오래 타는 극지의 에너지 광석.", usable: false, type: "재료" },
-  feather: { name: "깃털", icon: "🪶", desc: "조류의 둥지 등에서 획득한 방한 효과가 뛰어난 솜깃털.", usable: false, type: "재료" },
-  tendon: { name: "동물 힘줄", icon: "🧶", desc: "야생동물에게서 얻은 매우 질긴 실 형태의 섬유질.", usable: false, type: "재료" },
-  scrap_circuit: { name: "고장난 회로", icon: "📟", desc: "군용 장비나 기계 부속에서 떼어낸 전자 기판 회로.", usable: false, type: "재료" },
+  wire: { name: "구리선", icon: "🔌", image: "images/wire.png", desc: "기계 장치나 케이블에서 추출한 피복 전선.", usable: false, type: "재료" },
+  flint: { name: "부싯돌", icon: "🪨", image: "images/flint.png", desc: "단단하게 굳어 날카로운 불꽃을 일으킬 수 있는 돌멩이.", usable: false, type: "재료" },
+  coal: { name: "석탄", icon: "🌑", image: "images/coal.png", desc: "화력이 매우 강하고 오래 타는 극지의 에너지 광석.", usable: false, type: "재료" },
+  feather: { name: "깃털", icon: "🪶", image: "images/feather.png", desc: "조류의 둥지 등에서 획득한 방한 효과가 뛰어난 솜깃털.", usable: false, type: "재료" },
+  tendon: { name: "동물 힘줄", icon: "🧶", image: "images/tendon.png", desc: "야생동물에게서 얻은 매우 질긴 실 형태의 섬유질.", usable: false, type: "재료" },
+  scrap_circuit: { name: "고장난 회로", icon: "📟", image: "images/scrap_circuit.png", desc: "군용 장비나 기계 부속에서 떼어낸 전자 기판 회로.", usable: false, type: "재료" },
+  
+  // 신규 2차 가공 재료 추가
+  steel_plate: { name: "강철 판재", icon: "🧱", image: "images/steel_plate.png", desc: "고철 조각을 녹여서 단단하고 판판하게 두드려 제련한 철판.", usable: false, type: "재료" },
+  electric_motor: { name: "전동 모터", icon: "⚙️", image: "images/electric_motor.png", desc: "회로와 고철, 전선을 정교하게 결합한 회전식 동력 모터.", usable: false, type: "재료" },
+  energy_core: { name: "에너지 코어", icon: "🔮", image: "images/energy_core.png", desc: "회로 부속과 석탄, 전선을 얽어 소형 발전기로 작동시키는 핵심 코어.", usable: false, type: "재료" },
+
+  // 신규 무기류 16종 추가 (밸런스 및 2차 제작 설명 반영)
+  stone_knife: { name: "뾰족한 돌칼", icon: "🔪", desc: "단단한 돌을 갈아 만든 임시 호신용 칼. (공격력 +6)", usable: false, type: "무기", atk: 6 },
+  bone_dagger: { name: "뼈단검", icon: "🗡️", desc: "짐승의 뼈를 갈아서 매우 뾰족하게 다듬은 단검. (공격력 +9)", usable: false, type: "무기", atk: 9 },
+  scrap_axe: { name: "고철 도끼", icon: "🪓", desc: "쇠파이프와 고철 날을 덧대어 묵직하게 조립한 손도끼. (공격력 +14)", usable: false, type: "무기", atk: 14 },
+  hunting_bow: { name: "사냥용 활", icon: "🏹", desc: "나뭇가지와 튼튼한 동물 힘줄로 엮어 만든 활. (공격력 +18)", usable: false, type: "무기", atk: 18 },
+  barbed_club: { name: "가시 몽둥이", icon: "🏏", desc: "나무 몽둥이에 고철 가시와 구리선을 칭칭 감아 위력을 더했습니다. (공격력 +20)", usable: false, type: "무기", atk: 20 },
+  iron_sword: { name: "제련된 철검", icon: "⚔️", desc: "강철 판재를 뜨겁게 달구어 날카롭고 견고하게 벼려낸 검. (공격력 +26)", usable: false, type: "무기", atk: 26 },
+  heavy_mace: { name: "중량 메이스", icon: "🔨", desc: "머리 부분에 무거운 강철 판재 뭉치를 결합한 둔기. (공격력 +32)", usable: false, type: "무기", atk: 32 },
+  harpoon: { name: "고래 작살", icon: "🔱", desc: "고대 고래잡이에 썼던 것 같은 견고하고 갈고리진 날의 창. (공격력 +38)", usable: false, type: "무기", atk: 38 },
+  machete: { name: "생존자 정글도", icon: "🗡️", desc: "두껍고 넓은 날을 가진 만능 칼. 날이 날카롭고 매섭습니다. (공격력 +42)", usable: false, type: "무기", atk: 42 },
+  crossbow: { name: "기계식 석궁", icon: "🏹", desc: "사냥용 활에 고철판과 방아쇠 장치를 더해 위력을 강화한 석궁. (공격력 +50)", usable: false, type: "무기", atk: 50 },
+  chainsaw_sword: { name: "톱날 회전검", icon: "⚙️", desc: "철검의 날에 전동 모터를 연동하여 톱날이 회전하는 강력한 무기. (공격력 +60)", usable: false, type: "무기", atk: 60 },
+  shock_baton: { name: "전술 충격봉", icon: "⚡", desc: "도끼의 충격량에 에너지 코어와 전동 모터의 전력을 결합한 충격봉. (공격력 +70)", usable: false, type: "무기", atk: 70 },
+  plasma_cutter: { name: "플라즈마 절단기", icon: "🔦", desc: "에너지 코어와 강철 판재를 결합해 철판도 쉽게 베어내는 광선 절단기. (공격력 +82)", usable: false, type: "무기", atk: 82 },
+  polar_titan_lance: { name: "타이탄 랜스", icon: "🔱", desc: "고래 작살에 여러 개의 에너지 코어를 조율해 기갑 관통력을 실은 창. (공격력 +95)", usable: false, type: "무기", atk: 95 },
+  alloy_greatsword: { name: "합금 대검", icon: "🗡️", desc: "철검을 강철 판재로 덧씌우고 보강하여 한 손으로 휘두르기 버거운 대검. (공격력 +110)", usable: false, type: "무기", atk: 110 },
+  laser_scythe: { name: "레이저 낫", icon: "🛸", desc: "작살 날을 베이스로 다수의 에너지 코어 광선을 뿜는 초고테크 전투용 낫. (공격력 +130)", usable: false, type: "무기", atk: 130 },
 
   // 신규 장비류 - 머리 (의복)
   hat_wool: { name: "털모자", icon: "🧶", desc: "천으로 짠 가볍고 부드러운 방한 모자. (방한 +2)", equippable: true, slot: "head", stats: { defense: 1, warmth_retention: 2, health: 5 }, type: "방어구" },
@@ -42,7 +74,7 @@ const ITEM_DATABASE = {
   coat_wool: { name: "단열 천 파카", icon: "🧥", desc: "천을 솜처럼 겹겹이 덧댄 단열 파카. (방한 +4)", equippable: true, slot: "body", stats: { defense: 2, warmth_retention: 4, health: 10 }, type: "방어구" },
   coat_fur: { name: "늑대 가죽 코트", icon: "🐺", desc: "늑대 가죽으로 지은 보온성 최고의 통가죽 코트. (방어 +3, 방한 +6)", equippable: true, slot: "body", stats: { defense: 3, warmth_retention: 6, health: 15 }, type: "방어구" },
   coat_scraps: { name: "고철 판금 조끼", icon: "🛡️", desc: "가슴과 등에 고철을 덧댄 튼튼한 호신용 흉갑. (방어 +8, 방한 -1)", equippable: true, slot: "body", stats: { defense: 8, warmth_retention: -1, health: 20 }, type: "방어구" },
-  coat_tactical: { name: "군용 전술 조끼", icon: "🦺", desc: "방탄 재질과 다기능 주머니가 내장된 군용 장비. (방어 +6, 방한 +3)", equippable: true, slot: "body", stats: { defense: 6, warmth_retention: 3, health: 15 }, type: "방어구" },
+  coat_tactical: { name: "군용 전술 조끼", icon: "🦺", desc: "방탄 재질 and 다기능 주머니가 내장된 군용 장비. (방어 +6, 방한 +3)", equippable: true, slot: "body", stats: { defense: 6, warmth_retention: 3, health: 15 }, type: "방어구" },
   coat_feather: { name: "깃털 다운 재킷", icon: "🦅", desc: "솜털을 아낌없이 채워 넣은 최상급 패딩 재킷. (방한 +8)", equippable: true, slot: "body", stats: { defense: 1, warmth_retention: 8, health: 10 }, type: "방어구" },
   coat_bear: { name: "북극곰 방한 코트", icon: "🐻‍❄️", desc: "북극곰의 질긴 가죽으로 봉제한 명품 코트. (방어 +10, 방한 +10)", equippable: true, slot: "body", stats: { defense: 10, warmth_retention: 10, health: 40 }, type: "방어구" },
   coat_heavy: { name: "수호자 전신 갑옷", icon: "🛡️", desc: "온몸을 단단한 판금으로 감싸 보호하는 중갑옷. (방어 +12, 방한 +2)", equippable: true, slot: "body", stats: { defense: 12, warmth_retention: 2, health: 30 }, type: "방어구" },
@@ -94,11 +126,36 @@ const CRAFTING_RECIPES = {
   water: { name: "깨끗한 물", cost: { snow: 1, wood: 1, matches: 1 }, resultQty: 1, locked: false },
   cooked_meat: { name: "구운 고기", cost: { raw_meat: 1, wood: 1, matches: 1 }, resultQty: 1, locked: false },
   campfire: { name: "모닥불", cost: { wood: 3, matches: 1 }, resultQty: 1, locked: false },
+  herb_tea: { name: "약초 달인 차", cost: { water: 1, herb: 1, matches: 1 }, resultQty: 1, locked: false },
 
   // 도구 및 가구류 (잠겨있음 - 연구 필요)
   medkit: { name: "구급상자", cost: { herb: 2, cloth: 1 }, resultQty: 1, locked: true },
   spear: { name: "철제 창", cost: { wood: 2, metal: 1, tendon: 1 }, resultQty: 1, locked: true },
   tent: { name: "간이 텐트", cost: { wood: 4, hide: 2, tendon: 2 }, resultQty: 1, locked: true },
+
+  // 무기류 조합법 추가
+  // 2차 제작용 가공 재료 조합법 추가
+  steel_plate: { name: "강철 판재", cost: { metal: 2, coal: 1, matches: 1 }, resultQty: 1, locked: false },
+  electric_motor: { name: "전동 모터", cost: { wire: 2, metal: 1, scrap_circuit: 1 }, resultQty: 1, locked: true },
+  energy_core: { name: "에너지 코어", cost: { scrap_circuit: 2, wire: 2, coal: 1 }, resultQty: 1, locked: true },
+
+  // 무기류 조합법 추가 (2차 가공 재료 및 하위 무기 연계 적용)
+  stone_knife: { name: "뾰족한 돌칼", cost: { flint: 1, wood: 1 }, resultQty: 1, locked: false },
+  bone_dagger: { name: "뼈단검", cost: { tendon: 1, wood: 1 }, resultQty: 1, locked: false },
+  scrap_axe: { name: "고철 도끼", cost: { metal: 2, wood: 1 }, resultQty: 1, locked: true },
+  hunting_bow: { name: "사냥용 활", cost: { wood: 3, tendon: 2 }, resultQty: 1, locked: true },
+  barbed_club: { name: "가시 몽둥이", cost: { wood: 2, wire: 1, metal: 1 }, resultQty: 1, locked: true },
+  iron_sword: { name: "제련된 철검", cost: { steel_plate: 2, wood: 1, tendon: 1 }, resultQty: 1, locked: true },
+  heavy_mace: { name: "중량 메이스", cost: { steel_plate: 3, wood: 1 }, resultQty: 1, locked: true },
+  harpoon: { name: "고래 작살", cost: { steel_plate: 2, tendon: 3, wood: 2 }, resultQty: 1, locked: true },
+  machete: { name: "생존자 정글도", cost: { steel_plate: 2, hide: 2 }, resultQty: 1, locked: true },
+  crossbow: { name: "기계식 석궁", cost: { hunting_bow: 1, metal: 2, wire: 2 }, resultQty: 1, locked: true },
+  chainsaw_sword: { name: "톱날 회전검", cost: { iron_sword: 1, electric_motor: 1, wire: 2 }, resultQty: 1, locked: true },
+  shock_baton: { name: "전술 충격봉", cost: { scrap_axe: 1, electric_motor: 1, energy_core: 1 }, resultQty: 1, locked: true },
+  plasma_cutter: { name: "플라즈마 절단기", cost: { steel_plate: 2, energy_core: 2, wire: 2 }, resultQty: 1, locked: true },
+  polar_titan_lance: { name: "타이탄 랜스", cost: { harpoon: 1, energy_core: 2, tendon: 2 }, resultQty: 1, locked: true },
+  alloy_greatsword: { name: "합금 대검", cost: { iron_sword: 1, steel_plate: 4, tendon: 2 }, resultQty: 1, locked: true },
+  laser_scythe: { name: "레이저 낫", cost: { harpoon: 1, energy_core: 3, wire: 3 }, resultQty: 1, locked: true },
 
   // 옷 - 머리류 (잠겨있음 - 연구 필요)
   hat_wool: { name: "털모자", cost: { cloth: 2, tendon: 1 }, resultQty: 1, locked: true },
@@ -154,7 +211,10 @@ const BADGE_CLASS_MAP = {
   "음식": "badge-food",
   "일지": "badge-journal",
   "방어구": "badge-armor",
-  "중요": "badge-important"
+  "중요": "badge-important",
+  "의료품": "badge-medical",
+  "소모품": "badge-consumable",
+  "무기": "badge-weapon"
 };
 
 const RUINS_EVENT_DATA = {
@@ -326,7 +386,7 @@ const DOM = {
 let selectedSlotIdx = null;
 let selectedEquipSlotType = null;
 let selectedEquipJournalIdx = null;
-let combatState = { active: false, monster: null, petSkillUsed: false }; // 전투 관련 상태
+let combatState = { active: false, monster: null, petSkillUsed: false, enemiesQueue: [] }; // 전투 관련 상태
 
 // 게임 초기 시나리오 세팅 및 리스너 등록
 document.addEventListener("DOMContentLoaded", () => {
@@ -369,14 +429,29 @@ document.addEventListener("DOMContentLoaded", () => {
     DOM.merchantCloseX.addEventListener("click", closeMerchant);
   }
 
+  const hugeModal = document.getElementById("huge-detail-modal");
+  const hugeCloseX = document.getElementById("huge-detail-close-x");
+  if (hugeCloseX && hugeModal) {
+    hugeCloseX.addEventListener("click", () => {
+      hugeModal.classList.add("hidden");
+    });
+  }
+  if (hugeModal) {
+    hugeModal.addEventListener("click", (e) => {
+      if (e.target === hugeModal) {
+        hugeModal.classList.add("hidden");
+      }
+    });
+  }
+
   // 장비 슬롯 이벤트 연동
   const equipSlots = document.querySelectorAll(".equip-slot");
   equipSlots.forEach(slot => {
     slot.addEventListener("click", () => {
-      selectEquipSlotSimple(slot);
+      showEquipItemDetails(slot);
     });
     slot.addEventListener("dblclick", () => {
-      showEquipItemDetails(slot);
+      showHugeEquipItemDetails(slot);
     });
   });
   
@@ -495,8 +570,7 @@ function startGame() {
     inventory: [
       "matches", "matches", "matches",
       "wood", "wood",
-      "snow", "snow",
-      "journal_friction"
+      "snow", "snow"
     ],
     maxInventory: 15,
     currentEvent: null,
@@ -623,7 +697,7 @@ function renderDiscardSelectorModal(itemId) {
   
   const descEl = document.getElementById("discard-modal-desc");
   if (descEl) {
-    descEl.innerHTML = `획득하려는 아이템: <strong style="color: var(--color-accent);">${itemInfo.avatar || ''} ${itemInfo.name}</strong><br>배낭에서 버릴 물건을 선택하거나, 획득을 포기하십시오.`;
+    descEl.innerHTML = `획득하려는 아이템: <strong style="color: var(--color-accent);">${getItemIconHtml(itemInfo, "1.2rem")} ${itemInfo.name}</strong><br>배낭에서 버릴 물건을 선택하거나, 획득을 포기하십시오.`;
   }
   
   const listEl = document.getElementById("discard-backpack-list");
@@ -637,7 +711,7 @@ function renderDiscardSelectorModal(itemId) {
       itemDiv.className = "discard-item-row";
       itemDiv.innerHTML = `
         <div style="display:flex; align-items:center;">
-          <span class="discard-item-avatar">${invItem.avatar || '📦'}</span>
+          <span class="discard-item-avatar">${getItemIconHtml(invItem, "2.2rem")}</span>
           <span class="discard-item-name" style="margin-left:8px;">${invItem.name}</span>
         </div>
         <span class="item-badge ${badgeClass}" style="position:static; margin-right:8px; font-size:0.6rem;">${invItem.type}</span>
@@ -819,7 +893,7 @@ function renderInventory() {
     const badgeClass = BADGE_CLASS_MAP[item.type] || "badge-material";
     
     slot.innerHTML = `
-      <span class="item-icon">${item.icon}</span>
+      <span class="item-icon">${getItemIconHtml(item, "2.6rem")}</span>
       <span class="item-badge ${badgeClass}">${item.type}</span>
     `;
     slot.dataset.itemKey = itemId;
@@ -830,10 +904,10 @@ function renderInventory() {
     }
     
     slot.addEventListener("click", () => {
-      selectItemSimple(idx);
+      showItemDetails(idx);
     });
     slot.addEventListener("dblclick", () => {
-      showItemDetails(idx);
+      showHugeItemDetails(idx);
     });
   });
 }
@@ -875,8 +949,9 @@ function getItemStatString(item, itemId) {
     if (ef.hunger !== undefined) statMsg += `🍖포만+${ef.hunger} `;
     if (ef.sanity !== undefined) statMsg += `🧠정신+${ef.sanity} `;
   }
-  if (itemId === "spear") {
-    statMsg += `🔱공격+15 `;
+  if (itemId === "spear" || (item.type === "무기" && item.atk !== undefined)) {
+    const weaponAtk = item.atk || 25;
+    statMsg += `🔱공격+${weaponAtk} `;
   }
   return statMsg.trim();
 }
@@ -894,7 +969,7 @@ function showItemDetails(idx) {
   if (!itemId) return;
   const item = ITEM_DATABASE[itemId];
   
-  DOM.detailName.innerHTML = `${item.icon} ${item.name}`;
+  DOM.detailName.innerHTML = `${getItemIconHtml(item, "2.2rem")} ${item.name}`;
   
   const statMsg = getItemStatString(item, itemId);
   let formattedDesc = item.desc;
@@ -974,7 +1049,7 @@ function showEquipItemDetails(slot) {
   if (!itemId) return;
   const item = ITEM_DATABASE[itemId];
   
-  DOM.detailName.innerHTML = `${item.icon} ${item.name}`;
+  DOM.detailName.innerHTML = `${getItemIconHtml(item, "2.2rem")} ${item.name}`;
   
   const statMsg = getItemStatString(item, itemId);
   let formattedDesc = item.desc;
@@ -1006,6 +1081,67 @@ function closeItemDetail() {
   
   const equipSlots = document.querySelectorAll(".equip-slot");
   equipSlots.forEach(slot => slot.classList.remove("selected"));
+}
+
+// 초대형 상세 보기 모달 열기
+function openHugeDetailModal(item, itemId) {
+  const modal = document.getElementById("huge-detail-modal");
+  const img = document.getElementById("huge-detail-img");
+  const emoji = document.getElementById("huge-detail-emoji");
+  const title = document.getElementById("huge-detail-title");
+  const desc = document.getElementById("huge-detail-desc");
+  const statsBox = document.getElementById("huge-detail-stats-box");
+  const statsContent = document.getElementById("huge-detail-stats-content");
+  
+  if (!modal || !item) return;
+  
+  // 1. 이미지 혹은 에모지 설정
+  if (item.image) {
+    img.src = item.image;
+    img.classList.remove("hidden");
+    emoji.classList.add("hidden");
+  } else {
+    img.src = "";
+    img.classList.add("hidden");
+    emoji.textContent = item.icon;
+    emoji.classList.remove("hidden");
+  }
+  
+  // 2. 제목 및 설명
+  title.textContent = item.name;
+  desc.innerHTML = item.desc;
+  
+  // 3. 스탯
+  const statMsg = getItemStatString(item, itemId);
+  if (statMsg) {
+    statsBox.classList.remove("hidden");
+    statsContent.innerHTML = statMsg.replace(/ /g, "  ");
+  } else {
+    statsBox.classList.add("hidden");
+  }
+  
+  modal.classList.remove("hidden");
+}
+
+function showHugeItemDetails(idx) {
+  const itemId = state.inventory[idx];
+  if (!itemId) return;
+  const item = ITEM_DATABASE[itemId];
+  openHugeDetailModal(item, itemId);
+}
+
+function showHugeEquipItemDetails(slot) {
+  const slotType = slot.dataset.slot;
+  let itemId = null;
+  if (slotType === "journal") {
+    const jIdx = parseInt(slot.dataset.idx);
+    itemId = state.equipment.journals[jIdx];
+  } else {
+    itemId = state.equipment[slotType];
+  }
+  if (!itemId) return;
+  const item = ITEM_DATABASE[itemId];
+  openHugeDetailModal(item, itemId);
 }
 
 // 아이템 직접 사용/장착/해제
@@ -1073,13 +1209,13 @@ function renderCrafting() {
         ? `${owned}/${reqQty}` 
         : `<span style="color: #e74c3c; font-weight: bold;">${owned}</span>/${reqQty}`;
       
-      costText += `${costItem.icon} ${costItem.name} ${qtyText}`;
+      costText += `${getItemIconHtml(costItem, "1.1em")} ${costItem.name} ${qtyText}`;
       if (idx < costEntries.length - 1) costText += ", ";
     });
     
     craftItemDiv.innerHTML = `
       <div class="craft-info">
-        <span class="craft-name">${item.icon} ${recipe.name}</span>
+        <span class="craft-name">${getItemIconHtml(item, "1.2rem")} ${recipe.name}</span>
         <span class="craft-cost">${costText}</span>
       </div>
       <button class="btn btn-primary btn-craft" ${canCraft ? "" : "disabled"}>제작</button>
@@ -1377,10 +1513,10 @@ function renderCurrentEvent() {
         if (hasQty > 0) {
           hasAnyOffering = true;
           const mapData = RUINS_OFFERING_MAP[itemId];
-          const rewardsDesc = mapData.rewards.map(r => `${ITEM_DATABASE[r].icon} ${ITEM_DATABASE[r].name}`).join(" + ");
+          const rewardsDesc = mapData.rewards.map(r => `${getItemIconHtml(ITEM_DATABASE[r], "1em")} ${ITEM_DATABASE[r].name}`).join(" + ");
           const optBtn = document.createElement("button");
           optBtn.className = "btn-option";
-          optBtn.innerHTML = `${mapData.icon} ${mapData.name} 1개를 제단에 바친다 ➔ (보상: ${rewardsDesc} 지급)`;
+          optBtn.innerHTML = `${getItemIconHtml(ITEM_DATABASE[itemId], "1.1em")} ${mapData.name} 1개를 제단에 바친다 ➔ (보상: ${rewardsDesc} 지급)`;
           optBtn.addEventListener("click", () => {
             offeringRuins(itemId);
           });
@@ -1448,9 +1584,9 @@ function renderCurrentEvent() {
           const has = hasItemQty(opt.requiredItem);
           if (has <= 0) {
             satisfies = false;
-            reqMsg = ` [필요: ${reqItem.icon} ${reqItem.name}]`;
+            reqMsg = ` [필요: ${getItemIconHtml(reqItem, "1em")} ${reqItem.name}]`;
           } else {
-            reqMsg = ` [소유함: ${reqItem.icon} ${reqItem.name}${opt.consumeItem ? " - 소모됨" : ""}]`;
+            reqMsg = ` [소유함: ${getItemIconHtml(reqItem, "1em")} ${reqItem.name}${opt.consumeItem ? " - 소모됨" : ""}]`;
           }
         }
         
@@ -1957,7 +2093,7 @@ function renderEquipment() {
     if (cfg.val) {
       const item = ITEM_DATABASE[cfg.val];
       cfg.el.classList.add("equipped");
-      cfg.el.querySelector(".equip-slot-icon").textContent = item.icon;
+      cfg.el.querySelector(".equip-slot-icon").innerHTML = getItemIconHtml(item, "2.2rem");
       cfg.el.querySelector(".equip-slot-name").textContent = item.name;
       
       // 배지 추가
@@ -2005,7 +2141,7 @@ function renderEquipment() {
     if (val) {
       const item = ITEM_DATABASE[val];
       el.classList.add("equipped");
-      el.querySelector(".equip-slot-icon").textContent = item.icon;
+      el.querySelector(".equip-slot-icon").innerHTML = getItemIconHtml(item, "2.2rem");
       el.querySelector(".equip-slot-name").textContent = item.name;
       
       // 배지 추가
@@ -2382,12 +2518,22 @@ window.awakenPet = function(petIdx) {
 function triggerCombat(monsterData) {
   discoverMonster(monsterData.id); // 도감 발견 처리
   combatState.active = true;
-  combatState.monster = JSON.parse(JSON.stringify(monsterData));
   combatState.petSkillUsed = false;
   combatState.monsterStunned = false;
   combatState.monsterDebuffed50 = false;
   combatState.playerShieldTurns = 0;
   combatState.playerShieldValue = 0;
+  
+  // 만약 monsterData가 enemies 배열을 들고 있다면 다중 전투로 취급
+  if (monsterData.enemies && Array.isArray(monsterData.enemies) && monsterData.enemies.length > 0) {
+    combatState.enemiesQueue = JSON.parse(JSON.stringify(monsterData.enemies));
+  } else {
+    // 단일 적
+    combatState.enemiesQueue = [JSON.parse(JSON.stringify(monsterData))];
+  }
+  
+  // 첫 번째 적을 큐에서 꺼냄
+  combatState.monster = combatState.enemiesQueue.shift();
   
   // 화면 활성화 전환
   DOM.gameScreen.classList.remove("active");
@@ -2416,8 +2562,13 @@ function triggerCombat(monsterData) {
     DOM.combatBtnPetSkill.classList.add("hidden");
   }
   
-  // 로그 리셋
-  DOM.combatLog.innerHTML = `<p style="color: var(--color-accent); font-weight:700;">🚨 [${monsterData.name}] 조우! 대치 상황에 돌입합니다.</p>`;
+  // 첫 조우 로그 출력
+  if (monsterData.enemies && monsterData.enemies.length > 1) {
+    DOM.combatLog.innerHTML = `<p style="color: var(--color-accent); font-weight:700;">🚨 [${monsterData.name}] 조우! 여러 명의 적들이 무리 지어 위협합니다. (총 ${monsterData.enemies.length}명)</p>`;
+    logCombat(`⚔️ 첫 번째 적인 [${combatState.monster.name}]이(가) 먼저 앞장서서 위협적으로 대치합니다.`);
+  } else {
+    DOM.combatLog.innerHTML = `<p style="color: var(--color-accent); font-weight:700;">🚨 [${combatState.monster.name}] 조우! 대치 상황에 돌입합니다.</p>`;
+  }
   
   updateCombatUI();
 }
@@ -2427,7 +2578,14 @@ function updateCombatUI() {
   const m = combatState.monster;
   
   DOM.monsterIcon.textContent = m.icon || "👾";
-  DOM.monsterName.textContent = m.name;
+  
+  const remainingCount = combatState.enemiesQueue.length;
+  if (remainingCount > 0) {
+    DOM.monsterName.textContent = `${m.name} (남은 적: ${remainingCount}명)`;
+  } else {
+    DOM.monsterName.textContent = m.name;
+  }
+  
   DOM.monsterHpBar.style.width = `${(m.hp / m.maxHp) * 100}%`;
   DOM.monsterHpTxt.textContent = `HP: ${m.hp}/${m.maxHp}`;
   
@@ -2461,20 +2619,42 @@ function logCombat(msg) {
   DOM.combatLog.scrollTop = DOM.combatLog.scrollHeight;
 }
 
+function getPlayerAttack() {
+  let baseAtk = 20;
+  let maxWeaponAtk = 0;
+  let bestWeaponName = "";
+  
+  if (state.inventory) {
+    state.inventory.forEach(itemId => {
+      const item = ITEM_DATABASE[itemId];
+      if (item && item.type === "무기" && item.atk !== undefined) {
+        if (item.atk > maxWeaponAtk) {
+          maxWeaponAtk = item.atk;
+          bestWeaponName = item.name;
+        }
+      }
+    });
+  }
+  
+  return {
+    total: baseAtk + maxWeaponAtk,
+    weaponName: bestWeaponName,
+    hasWeapon: maxWeaponAtk > 0
+  };
+}
+
 function executePlayerAttack() {
   if (!combatState.active) return;
   
-  // 데미지 연산 (기본 공격력 20으로 상향, 창 소지 시 +25 가산하여 총 45)
-  let pAtk = 20;
-  if (hasItemQty("spear") > 0) {
-    pAtk += 25;
-    logCombat("🗡️ 장착한 철제 창을 강하게 휘두릅니다!");
+  const atkInfo = getPlayerAttack();
+  if (atkInfo.hasWeapon) {
+    logCombat(`🗡️ 소지 중인 [${atkInfo.weaponName}]을(를) 강하게 휘두릅니다!`);
   } else {
     logCombat("👊 주먹을 쥐고 맞섭니다.");
   }
   
   const m = combatState.monster;
-  const rawDamage = pAtk;
+  const rawDamage = atkInfo.total;
   const finalDamage = Math.max(1, rawDamage - m.def);
   
   m.hp = Math.max(0, m.hp - finalDamage);
@@ -2697,7 +2877,7 @@ function showCombatItemSelector() {
     const row = document.createElement("div");
     row.className = "combat-item-row";
     row.innerHTML = `
-      <span>${item.icon} ${item.name} (${qty}개)</span>
+      <span>${getItemIconHtml(item, "1.1em")} ${item.name} (${qty}개)</span>
       <span style="font-size:0.75rem; color:var(--color-text-sub);">${item.desc}</span>
     `;
     
@@ -2755,7 +2935,6 @@ function attemptEscape() {
 
 function executeCombatVictory() {
   const m = combatState.monster;
-  logCombat(`🎉 [${m.name}] 처치 완료! 전투에서 완벽한 승리를 거뒀습니다.`);
   
   // 전리품 복사
   let rewards = m.rewards ? JSON.parse(JSON.stringify(m.rewards)) : [];
@@ -2774,15 +2953,36 @@ function executeCombatVictory() {
     addToInventory(r.id, r.qty);
   });
   
-  if (!state.stats) {
-    state.stats = { combatsWon: 0, ruinsSacrificed: 0, petAwakenCount: 0 };
+  // 만약 큐에 남은 적이 있다면, 다음 적을 꺼내서 매칭
+  if (combatState.enemiesQueue && combatState.enemiesQueue.length > 0) {
+    const oldName = m.name;
+    combatState.monster = combatState.enemiesQueue.shift();
+    discoverMonster(combatState.monster.id); // 다음 몬스터 도감 등록
+    
+    // 전투 디버프 및 상태 리셋
+    combatState.monsterStunned = false;
+    combatState.monsterDebuffed50 = false;
+    combatState.monsterDebuffed = false;
+    
+    logCombat(`💀 [${oldName}] 처치 완료! 전리품이 가방에 추가되었습니다.`);
+    logCombat(`📢 뒤이어 **[${combatState.monster.name}]**이(가) 눈길을 헤치며 대치선에 새로 합류합니다!`);
+    
+    updateCombatUI();
+  } else {
+    // 모든 몬스터를 물리침 (최종 승리)
+    logCombat(`💀 [${m.name}] 처치 완료! 전리품이 가방에 추가되었습니다.`);
+    logCombat(`🎉 모든 위협을 격퇴하고 전투에서 완벽한 승리를 거뒀습니다!`);
+    
+    if (!state.stats) {
+      state.stats = { combatsWon: 0, ruinsSacrificed: 0, petAwakenCount: 0 };
+    }
+    state.stats.combatsWon++;
+    checkAchievements();
+    
+    setTimeout(() => {
+      endCombat();
+    }, 2000);
   }
-  state.stats.combatsWon++;
-  checkAchievements();
-  
-  setTimeout(() => {
-    endCombat();
-  }, 2000);
 }
 
 function endCombat() {
@@ -2797,89 +2997,114 @@ function endCombat() {
 }
 
 // 상인 판매 20가지 품목
+// 상인 판매 25가지 품목으로 확장 (일부 무기류 추가)
 const MERCHANT_ITEMS = [
   "matches", "wood", "water", "cooked_meat", "herb", 
   "medkit", "spear", "tent", "coal", "scrap_circuit", 
   "hat_wool", "pants_wool", "boots_wool", "coat_wool", "bag_small", 
-  "journal_cooking", "journal_friction", "flint", "wire", "hide"
+  "journal_cooking", "journal_friction", "flint", "wire", "hide",
+  "stone_knife", "bone_dagger", "scrap_axe", "hunting_bow", "crossbow",
+  "herb_tea", "steel_plate", "electric_motor", "energy_core"
 ];
 
 // 상인 거래 가치 매핑 테이블
 const ITEM_VALUES = {
-  wood: { buy: 4, sell: 1 },
-  matches: { buy: 8, sell: 2 },
+  wood: { buy: 4, sell: 2 },
+  matches: { buy: 8, sell: 4 },
   snow: { buy: 2, sell: 1 },
-  water: { buy: 12, sell: 4 },
-  raw_meat: { buy: 15, sell: 5 },
-  cooked_meat: { buy: 30, sell: 10 },
-  hide: { buy: 22, sell: 7 },
-  metal: { buy: 22, sell: 7 },
-  herb: { buy: 25, sell: 8 },
-  cloth: { buy: 20, sell: 6 },
-  campfire: { buy: 30, sell: 10 },
-  spear: { buy: 70, sell: 20 },
-  tent: { buy: 140, sell: 40 },
-  medkit: { buy: 60, sell: 20 },
-  wire: { buy: 18, sell: 5 },
-  flint: { buy: 15, sell: 4 },
-  coal: { buy: 20, sell: 6 },
-  feather: { buy: 15, sell: 4 },
-  tendon: { buy: 20, sell: 6 },
-  scrap_circuit: { buy: 40, sell: 12 },
+  water: { buy: 12, sell: 6 },
+  raw_meat: { buy: 15, sell: 7 },
+  cooked_meat: { buy: 30, sell: 15 },
+  hide: { buy: 22, sell: 10 },
+  metal: { buy: 22, sell: 10 },
+  herb: { buy: 25, sell: 12 },
+  cloth: { buy: 20, sell: 9 },
+  campfire: { buy: 30, sell: 14 },
+  spear: { buy: 70, sell: 32 },
+  tent: { buy: 140, sell: 65 },
+  medkit: { buy: 60, sell: 28 },
+  wire: { buy: 18, sell: 8 },
+  flint: { buy: 15, sell: 7 },
+  coal: { buy: 20, sell: 9 },
+  feather: { buy: 15, sell: 7 },
+  tendon: { buy: 20, sell: 9 },
+  scrap_circuit: { buy: 40, sell: 18 },
+  herb_tea: { buy: 20, sell: 10 },
+  steel_plate: { buy: 50, sell: 23 },
+  electric_motor: { buy: 70, sell: 32 },
+  energy_core: { buy: 120, sell: 55 },
+  
+  // 신규 무기류 가치 등록
+  stone_knife: { buy: 15, sell: 7 },
+  bone_dagger: { buy: 22, sell: 10 },
+  scrap_axe: { buy: 35, sell: 16 },
+  hunting_bow: { buy: 48, sell: 22 },
+  barbed_club: { buy: 55, sell: 25 },
+  iron_sword: { buy: 65, sell: 30 },
+  heavy_mace: { buy: 85, sell: 40 },
+  harpoon: { buy: 95, sell: 45 },
+  machete: { buy: 110, sell: 50 },
+  crossbow: { buy: 130, sell: 60 },
+  chainsaw_sword: { buy: 160, sell: 75 },
+  shock_baton: { buy: 190, sell: 90 },
+  plasma_cutter: { buy: 230, sell: 110 },
+  polar_titan_lance: { buy: 270, sell: 130 },
+  alloy_greatsword: { buy: 310, sell: 150 },
+  laser_scythe: { buy: 380, sell: 185 },
   
   // 신규 방어구들
-  hat_wool: { buy: 30, sell: 9 },
-  hat_scraps: { buy: 50, sell: 15 },
-  hat_fur: { buy: 45, sell: 13 },
-  hat_goggles: { buy: 45, sell: 13 },
-  hat_fox: { buy: 60, sell: 18 },
-  hat_bear: { buy: 90, sell: 27 },
-  hat_feather: { buy: 35, sell: 10 },
-  hat_heavy: { buy: 50, sell: 15 },
+  hat_wool: { buy: 30, sell: 14 },
+  hat_scraps: { buy: 50, sell: 23 },
+  hat_fur: { buy: 45, sell: 20 },
+  hat_goggles: { buy: 45, sell: 20 },
+  hat_fox: { buy: 60, sell: 27 },
+  hat_bear: { buy: 90, sell: 40 },
+  hat_feather: { buy: 35, sell: 16 },
+  hat_heavy: { buy: 50, sell: 23 },
   
-  coat_wool: { buy: 45, sell: 13 },
-  coat_fur: { buy: 75, sell: 22 },
-  coat_scraps: { buy: 90, sell: 27 },
-  coat_tactical: { buy: 95, sell: 28 },
-  coat_feather: { buy: 100, sell: 30 },
-  coat_bear: { buy: 180, sell: 54 },
-  coat_heavy: { buy: 90, sell: 27 },
-  coat_thermal_adv: { buy: 85, sell: 25 },
+  coat_wool: { buy: 45, sell: 20 },
+  coat_fur: { buy: 75, sell: 34 },
+  coat_scraps: { buy: 90, sell: 40 },
+  coat_tactical: { buy: 95, sell: 43 },
+  coat_feather: { buy: 100, sell: 45 },
+  coat_bear: { buy: 180, sell: 85 },
+  coat_heavy: { buy: 90, sell: 40 },
+  coat_thermal_adv: { buy: 85, sell: 38 },
   
-  pants_wool: { buy: 30, sell: 9 },
-  pants_fur: { buy: 50, sell: 15 },
-  pants_scraps: { buy: 60, sell: 18 },
-  pants_combat: { buy: 65, sell: 19 },
-  pants_thermal: { buy: 80, sell: 24 },
-  pants_bear: { buy: 110, sell: 33 },
-  pants_feather: { buy: 40, sell: 12 },
-  pants_heavy: { buy: 55, sell: 16 },
+  pants_wool: { buy: 30, sell: 14 },
+  pants_fur: { buy: 50, sell: 23 },
+  pants_scraps: { buy: 60, sell: 27 },
+  pants_combat: { buy: 65, sell: 30 },
+  pants_thermal: { buy: 80, sell: 36 },
+  pants_bear: { buy: 110, sell: 50 },
+  pants_feather: { buy: 40, sell: 18 },
+  pants_heavy: { buy: 55, sell: 25 },
   
-  boots_wool: { buy: 20, sell: 6 },
-  boots_leather: { buy: 35, sell: 10 },
-  boots_scraps: { buy: 45, sell: 13 },
-  boots_combat: { buy: 50, sell: 15 },
-  boots_insulated: { buy: 60, sell: 18 },
-  boots_bear: { buy: 95, sell: 28 },
-  boots_feather: { buy: 25, sell: 7 },
-  boots_heavy: { buy: 40, sell: 12 },
+  boots_wool: { buy: 20, sell: 9 },
+  boots_leather: { buy: 35, sell: 16 },
+  boots_scraps: { buy: 45, sell: 20 },
+  boots_combat: { buy: 50, sell: 23 },
+  boots_insulated: { buy: 60, sell: 27 },
+  boots_bear: { buy: 95, sell: 43 },
+  boots_feather: { buy: 25, sell: 11 },
+  boots_heavy: { buy: 40, sell: 18 },
   
-  bag_small: { buy: 50, sell: 15 },
-  bag_medium: { buy: 80, sell: 24 },
-  bag_large: { buy: 130, sell: 39 },
-  bag_thermal: { buy: 100, sell: 30 },
-  bag_tactical: { buy: 150, sell: 45 },
-  bag_academic: { buy: 80, sell: 24 },
+  bag_small: { buy: 50, sell: 23 },
+  bag_medium: { buy: 80, sell: 36 },
+  bag_large: { buy: 130, sell: 60 },
+  bag_thermal: { buy: 100, sell: 45 },
+  bag_tactical: { buy: 150, sell: 70 },
+  bag_academic: { buy: 80, sell: 36 },
   
-  journal_hunting: { buy: 100, sell: 30 },
-  journal_cooking: { buy: 100, sell: 30 },
-  journal_meditation: { buy: 100, sell: 30 },
-  journal_engineering: { buy: 100, sell: 30 },
-  journal_scouting: { buy: 100, sell: 30 },
-  journal_taming: { buy: 100, sell: 30 },
-  journal_thinking: { buy: 100, sell: 30 },
-  journal_friction: { buy: 100, sell: 30 },
-  journal_attraction: { buy: 100, sell: 30 }
+  journal_hunting: { buy: 100, sell: 45 },
+  journal_cooking: { buy: 100, sell: 45 },
+  journal_meditation: { buy: 100, sell: 45 },
+  journal_engineering: { buy: 100, sell: 45 },
+  journal_scouting: { buy: 100, sell: 45 },
+  journal_taming: { buy: 100, sell: 45 },
+  journal_thinking: { buy: 100, sell: 45 },
+  journal_friction: { buy: 100, sell: 45 },
+  journal_attraction: { buy: 100, sell: 45 }
 };
 
 // 상인 방문 이벤트 빌더 (가중치 추출 20% 보정 적용)
@@ -2954,7 +3179,7 @@ function renderMerchantModal(tab = "buy") {
       const descText = statMsg ? `${item.desc} <span style="color:var(--color-accent); font-weight:700;">[${statMsg}]</span>` : item.desc;
       row.innerHTML = `
         <div style="display:flex; align-items:center; flex:1; overflow:hidden;">
-          <span class="discard-item-avatar">${item.icon}</span>
+          <span class="discard-item-avatar">${getItemIconHtml(item, "2.2rem")}</span>
           <div style="display:flex; flex-direction:column; margin-left:8px; overflow:hidden; text-overflow:ellipsis;">
             <span class="discard-item-name" style="font-weight:700;">${item.name}</span>
             <span style="font-size:0.68rem; color:var(--color-text-sub); white-space: normal; line-height: 1.3; margin-top: 2px;">${descText}</span>
@@ -2982,7 +3207,7 @@ function renderMerchantModal(tab = "buy") {
       const descText = statMsg ? `${item.desc} <span style="color:var(--color-accent); font-weight:700;">[${statMsg}]</span>` : item.desc;
       row.innerHTML = `
         <div style="display:flex; align-items:center; flex:1; overflow:hidden;">
-          <span class="discard-item-avatar">${item.icon}</span>
+          <span class="discard-item-avatar">${getItemIconHtml(item, "2.2rem")}</span>
           <div style="display:flex; flex-direction:column; margin-left:8px; overflow:hidden;">
             <span class="discard-item-name" style="font-weight:700;">${item.name} (보유: ${qty}개)</span>
             <span style="font-size:0.68rem; color:var(--color-text-sub); white-space: normal; line-height: 1.3; margin-top: 2px;">${descText}</span>
@@ -3259,7 +3484,7 @@ function renderArchive(tabName = "achievements") {
         const statMsg = getItemStatString(item, itemId);
         const descText = statMsg ? `${item.desc} [${statMsg}]` : item.desc;
         card.innerHTML = `
-          <span class="archive-card-icon">${item.icon}</span>
+          <span class="archive-card-icon">${getItemIconHtml(item, "2.2rem")}</span>
           <div class="archive-card-info">
             <span class="archive-card-title">${item.name}</span>
             <span class="archive-card-desc">${descText}</span>
@@ -3294,7 +3519,7 @@ function renderArchive(tabName = "achievements") {
         const statMsg = getItemStatString(item, itemId);
         const descText = statMsg ? `${item.desc} [${statMsg}]` : item.desc;
         card.innerHTML = `
-          <span class="archive-card-icon">${item.icon}</span>
+          <span class="archive-card-icon">${getItemIconHtml(item, "2.2rem")}</span>
           <div class="archive-card-info">
             <span class="archive-card-title">${item.name}</span>
             <span class="archive-card-desc">${descText}</span>
@@ -3330,10 +3555,10 @@ function renderArchive(tabName = "achievements") {
         let costNames = [];
         for (const [costId, reqQty] of Object.entries(recipe.cost)) {
           const costItem = ITEM_DATABASE[costId];
-          if (costItem) costNames.push(`${costItem.icon}${costItem.name}x${reqQty}`);
+          if (costItem) costNames.push(`${getItemIconHtml(costItem, "1em")}${costItem.name}x${reqQty}`);
         }
         card.innerHTML = `
-          <span class="archive-card-icon">${item.icon}</span>
+          <span class="archive-card-icon">${getItemIconHtml(item, "2.2rem")}</span>
           <div class="archive-card-info">
             <span class="archive-card-title">${recipe.name} 제작법</span>
             <span class="archive-card-desc" style="color:#2ecc71;">조합법: ${costNames.join(", ")}</span>

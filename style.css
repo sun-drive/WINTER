@@ -537,8 +537,16 @@ body::after {
 }
 
 .item-icon {
-    font-size: 1.5rem;
+    font-size: 2.6rem;
     margin-bottom: 2px;
+}
+
+.item-img-icon {
+    display: inline-block;
+    vertical-align: middle;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .item-qty {
@@ -817,7 +825,7 @@ body::after {
 }
 
 .equip-slot-icon {
-    font-size: 1.25rem;
+    font-size: 2.2rem;
     margin-top: 8px;
 }
 
@@ -1070,7 +1078,7 @@ body::after {
 
 .discard-item-avatar {
     margin-right: 8px;
-    font-size: 1.1rem;
+    font-size: 2.2rem;
 }
 
 .discard-item-name {
@@ -1172,6 +1180,9 @@ body::after {
 .badge-journal { color: #9b59b6; } /* 일지 */
 .badge-armor { color: #3498db; } /* 방어구 */
 .badge-important { color: #e74c3c; } /* 중요 */
+.badge-medical { color: #1abc9c; } /* 의료품 */
+.badge-consumable { color: #e67e22; } /* 소모품 */
+.badge-weapon { color: #e74c3c; font-weight: bold; } /* 무기 */
 
 /* 이벤트 타입 배지 크기 2배 */
 .event-type-badge {
@@ -1360,5 +1371,150 @@ body::after {
 .achievement-card.unlocked .achievement-status-badge {
     background: var(--color-accent);
     color: #000;
+}
+
+/* 초대형 상세 모달 스타일 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.huge-detail-card {
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(52, 152, 219, 0.2);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalScaleUp {
+    from {
+        transform: scale(0.9) translateY(10px);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.huge-detail-close-x {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.huge-detail-close-x:hover {
+    background: rgba(231, 76, 60, 0.8);
+    transform: rotate(90deg);
+}
+
+.huge-detail-image-wrapper {
+    width: 100%;
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, rgba(26, 36, 56, 0.8), rgba(10, 15, 30, 0.9));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.huge-detail-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.huge-detail-image-wrapper img.hidden {
+    display: none;
+}
+
+.huge-detail-image-wrapper .huge-detail-emoji-fallback {
+    font-size: 5rem;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+.huge-detail-image-wrapper .huge-detail-emoji-fallback.hidden {
+    display: none;
+}
+
+.huge-detail-info {
+    padding: 20px;
+}
+
+.huge-detail-info h2 {
+    font-size: 1.6rem;
+    color: var(--color-primary);
+    margin-bottom: 12px;
+    text-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+}
+
+.huge-detail-info p {
+    font-size: 0.95rem;
+    color: var(--color-text-main);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.huge-detail-stats-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 12px 16px;
+}
+
+.huge-detail-stats-box h4 {
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.huge-detail-stats-box p {
+    font-size: 0.9rem;
+    color: var(--color-text-sub);
+    margin-bottom: 0;
+    line-height: 1.4;
+}
+
+.huge-detail-stats-box.hidden {
+    display: none;
 }
 

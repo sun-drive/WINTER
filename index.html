@@ -374,6 +374,25 @@
     <!-- 로깅/알림 토스트 -->
     <div id="toast-container"></div>
 
+    <!-- 초대형 상세 보기 모달 -->
+    <div id="huge-detail-modal" class="modal-overlay hidden">
+        <div class="huge-detail-card">
+            <button class="huge-detail-close-x" id="huge-detail-close-x">×</button>
+            <div class="huge-detail-image-wrapper">
+                <img id="huge-detail-img" class="hidden" src="" alt="" />
+                <span id="huge-detail-emoji" class="huge-detail-emoji-fallback hidden"></span>
+            </div>
+            <div class="huge-detail-info">
+                <h2 id="huge-detail-title">나뭇가지</h2>
+                <p id="huge-detail-desc">설명</p>
+                <div id="huge-detail-stats-box" class="huge-detail-stats-box hidden">
+                    <h4>📊 아이템 스탯</h4>
+                    <p id="huge-detail-stats-content">스탯</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="events.js"></script>
     <script src="game.js"></script>
 </body>
