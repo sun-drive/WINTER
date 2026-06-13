@@ -2587,6 +2587,998 @@ const survivalEvents = [
     }
   },
   {
+    id: "ev_chain_1_1",
+    title: "늑대 무리의 보은 - 덫에 걸린 야수",
+    description: "눈 늪 속 날카로운 쇠사슬 덫에 뒷다리가 끼어 끙끙 앓고 있는 우두머리 늑대 한 마리를 발견합니다. 인기척을 느끼고 경계하면서도 아프다는 듯 신음하고 있습니다.",
+    options: [
+      {
+        text: "조심히 다가가 덫을 풀어준다 (체력 -5, 정신력 +10)",
+        effect: { health: -5, warmth: 0, hunger: 0, sanity: 10 },
+        nextChainEventId: "ev_chain_1_2",
+        resultText: "늑대가 낮게 으르렁거렸지만 얌전히 덫을 풀게 두었습니다. 덫이 풀리자 눈길을 절뚝거리며 숲속으로 유유히 사라집니다."
+      },
+      {
+        text: "귀중한 사냥 기회다! 창으로 사냥한다 (창 필요, 고기/가죽 획득)",
+        requiredItem: "spear",
+        consumeItem: false,
+        effect: { health: -10, warmth: -5, hunger: -5, sanity: -5 },
+        rewardItems: [
+          { id: "raw_meat", qty: 2 },
+          { id: "hide", qty: 1 }
+        ],
+        resultText: "덫에 걸린 늑대를 철제 창으로 찔러 사냥했습니다. 풍부한 생고기와 가죽을 챙겼습니다."
+      },
+      {
+        text: "보복이 두려우니 조용히 자리를 피한다 (정신력 -5)",
+        effect: { health: 0, warmth: 0, hunger: 0, sanity: -5 },
+        resultText: "야생동물의 일에 무리하게 관여하지 않는 것이 좋습니다. 고통스럽게 우는 늑대를 뒤로하고 갈 길을 재촉합니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_1_2",
+    title: "늑대 무리의 보은 - 한밤의 선물",
+    description: "밤이 깊은 시각, 간이 텐트와 모닥불 주변에서 사각거리는 발걸음 소리가 들려옵니다. 텐트 틈으로 밖을 내다보니, 어제 구해준 우두머리 늑대가 입에 물고기를 물고 와 텐트 입구에 살며시 내려놓고 물러섭니다.",
+    options: [
+      {
+        text: "물고기를 감사히 챙긴다 (물고기 2개 획득, 정신력 +15)",
+        effect: { health: 0, warmth: 0, hunger: 0, sanity: 15 },
+        rewardItems: [{ id: "fish", qty: 2 }],
+        resultText: "늑대가 두고 간 싱싱한 물고기를 손에 쥐었습니다. 늑대는 고개를 까딱하고 눈밭 속으로 유유히 사라집니다. 혹독한 추위 속에 묘한 따스함을 느낍니다."
+      },
+      {
+        text: "미끼용 함정일지 모르니 돌을 던져 쫓아낸다 (정신력 -10)",
+        effect: { health: 0, warmth: -5, hunger: -5, sanity: -10 },
+        resultText: "돌을 던지자 늑대는 실망한 듯한 눈빛으로 쳐다보며 물고기를 둔 채 도망칩니다. 물고기는 버리고 경계심을 계속 유지합니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_2_1",
+    title: "사선 위의 조난자 - 크레바스의 비명",
+    description: "눈이 덮인 깊은 크레바스 아래쪽 구덩이에서 가녀린 사람의 조난 신음이 메아리칩니다. 누군가 발을 헛디뎌 굴러떨어진 것이 분명합니다. 장비가 없다면 구출하기 어렵습니다.",
+    options: [
+      {
+        text: "밧줄 대용으로 쓸 깨끗한 천을 던져 끌어올린다 (천 소모, 체온 -10)",
+        requiredItem: "cloth",
+        consumeItem: true,
+        effect: { health: -5, warmth: -10, hunger: -10, sanity: 5 },
+        nextChainEventId: "ev_chain_2_2",
+        resultText: "천을 길게 엮어 구덩이 아래로 내려보냈습니다. 온 힘을 다해 조난자를 끌어올리는 데 성공했습니다!"
+      },
+      {
+        text: "내 코가 석 자다. 못 들은 척 무시하고 지나친다 (정신력 -15)",
+        effect: { health: 0, warmth: 0, hunger: 0, sanity: -15 },
+        resultText: "모르는 척 고개를 돌리고 전진합니다. 등 뒤에서 들려오는 희미한 신음소리가 귓가에 맴돌며 정신을 괴롭힙니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_2_2",
+    title: "사선 위의 조난자 - 텐트 안의 고열",
+    description: "어제 구출해 낸 조난자가 밤사이 심한 고열과 동상 증세로 전신을 벌벌 떨며 신음합니다. 긴급한 응급처치를 해주지 않으면 오늘 밤을 넘기기 힘들어 보입니다.",
+    options: [
+      {
+        text: "구급상자를 사용하여 정성껏 치료한다 (구급상자 소모, 정신력 +20)",
+        requiredItem: "medkit",
+        consumeItem: true,
+        effect: { health: 0, warmth: -5, hunger: -5, sanity: 20 },
+        nextChainEventId: "ev_chain_2_3",
+        resultText: "구급상자의 소독약과 동상 크림을 바르고 약을 먹이자 조난자의 호흡이 점차 평온해지며 안정을 되찾습니다."
+      },
+      {
+        text: "귀한 약초를 으깨어 따뜻한 물과 먹인다 (약초 소모, 정신력 +10)",
+        requiredItem: "herb",
+        consumeItem: true,
+        effect: { health: 0, warmth: -10, hunger: -5, sanity: 10 },
+        nextChainEventId: "ev_chain_2_3",
+        resultText: "약초를 으깨어 먹였습니다. 완전히 회복되지는 않았지만, 열이 조금씩 내리며 깊은 잠에 빠집니다."
+      },
+      {
+        text: "치료 수단이 없으니 어쩔 수 없이 방치한다 (조난자 사망, 정신력 -30)",
+        effect: { health: 0, warmth: 0, hunger: 0, sanity: -30 },
+        resultText: "도와줄 방법이 없어 방치했습니다. 다음날 아침, 차갑게 굳어버린 시신을 발견합니다. 극심한 자책감이 밀려옵니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_2_3",
+    title: "사선 위의 조난자 - 은인의 선물",
+    description: "정신을 차린 조난자가 몸을 추스르고 은인에게 거듭 감사를 표합니다. 그는 자신이 기지 인근 눈밭에 숨겨둔 비밀 보급함의 좌표가 적힌 지도를 건네며 무사히 하산합니다.",
+    options: [
+      {
+        text: "지도가 가리키는 눈더미 좌표를 파낸다 (고철/성냥/구급상자 획득, 체력 -10)",
+        effect: { health: -10, warmth: -10, hunger: -15, sanity: 15 },
+        rewardItems: [
+          { id: "metal", qty: 2 },
+          { id: "matches", qty: 2 },
+          { id: "medkit", qty: 1 }
+        ],
+        resultText: "조난자가 준 지도를 따라 두꺼운 얼음 언덕을 파헤치자, 놀랍게도 방수 배낭 안에 고철, 성냥, 구급상자가 온전하게 들어있었습니다!"
+      },
+      {
+        text: "지도를 무시하고 불쏘시개로 쓴다 (성냥 소모, 체온 +15)",
+        requiredItem: "matches",
+        consumeItem: true,
+        effect: { health: 0, warmth: 15, hunger: 0, sanity: 5 },
+        resultText: "좌표까지 찾아갈 힘이 없습니다. 지도를 불속에 태워 즉시 따뜻한 몸을 녹입니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_3_1",
+    title: "고장 난 기상 관측소 - 누전되는 배전반",
+    description: "눈 속에 버려진 오래된 소형 기상 관측소의 배전반이 찌르르 소리를 내며 노란 불꽃을 튀깁니다. 내부 배선이 아직 살아있는 것 같습니다.",
+    options: [
+      {
+        text: "구리선과 쓸만한 부품들을 조심히 뜯어낸다 (구리선/회로 획득, 체력 -5)",
+        effect: { health: -5, warmth: -5, hunger: -5, sanity: 5 },
+        rewardItems: [
+          { id: "wire", qty: 2 },
+          { id: "scrap_circuit", qty: 1 }
+        ],
+        nextChainEventId: "ev_chain_3_2",
+        resultText: "정전기 스파크에 손을 찌릿하게 데어가며, 기계의 구리 배선과 망가진 제어 회로 부품을 알뜰하게 뜯어내 가방에 챙겼습니다."
+      },
+      {
+        text: "안전을 위해 기계를 완전히 때려 부수어 고철을 챙긴다 (고철 3개 획득, 체력 -15)",
+        effect: { health: -15, warmth: -5, hunger: -10, sanity: -5 },
+        rewardItems: [{ id: "metal", qty: 3 }],
+        resultText: "쇠망치로 배전반을 모조리 때려 부수어 고철 조각들을 많이 획득했습니다. 하지만 손등에 상처를 잔뜩 입었습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_3_2",
+    title: "고장 난 기상 관측소 - 회로의 잔류 정전기",
+    description: "어제 배전반에서 뜯어낸 회로 칩과 구리선 뭉치가 밤새 배낭 안에서 강한 전류 소음을 일으킵니다. 이를 방치하면 전기 장비가 망가질 수 있습니다.",
+    options: [
+      {
+        text: "정밀하게 전류를 소진시키고 코어를 추출한다 (에너지 코어 획득, 정신력 +10)",
+        effect: { health: 0, warmth: 0, hunger: 0, sanity: 10 },
+        rewardItems: [{ id: "energy_core", qty: 1 }],
+        resultText: "배선들을 조심히 연결하여 정전기 방전을 유도한 뒤, 농축된 전류 에너지를 지닌 소형 에너지 코어 1개를 추출하는 데 성공했습니다!"
+      },
+      {
+        text: "터질지 모르니 밤눈 속으로 힘껏 던져 버린다 (정신력 -5)",
+        effect: { health: 0, warmth: 0, hunger: 0, sanity: -5 },
+        resultText: "섬뜩한 소리에 놀라 부품들을 밤하늘 속으로 던져버렸습니다. 금속 배선과 회로가 사라져 아쉽지만 마음은 편안합니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_4_1",
+    title: "추락한 수송선 - 뒤틀린 동체",
+    description: "설산 중턱 바위 틈에 꼬리 날개가 부러져 반쯤 박힌 대형 군용 수송선 잔해가 보입니다. 조종실 해치는 차갑게 녹슬어 완전히 얼어붙어 있습니다.",
+    options: [
+      {
+        text: "조종실 해치를 힘으로 강제로 잡아당겨 연다 (체력 -15, 포만감 -15)",
+        effect: { health: -15, warmth: -10, hunger: -15, sanity: 5 },
+        nextChainEventId: "ev_chain_4_2",
+        resultText: "어깨를 받치고 온 힘을 다해 잡아당기자 쩍하는 소리와 함께 조종실 문이 뜯겨 나갔습니다. 내부의 비상 등이 껌벅거리기 시작합니다."
+      },
+      {
+        text: "해치는 내버려 두고 날개 부근 화물만 수색한다 (성냥/천 획득, 체온 -10)",
+        effect: { health: 0, warmth: -10, hunger: -5, sanity: 5 },
+        rewardItems: [
+          { id: "matches", qty: 2 },
+          { id: "cloth", qty: 1 }
+        ],
+        resultText: "찢어진 수송선 날개 밑에 떨어진 보급 가방에서 소량의 성냥과 보온용 깨끗한 천 조각을 챙겨 철수했습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_4_2",
+    title: "추락한 수송선 - 경비 오토마톤 오작동",
+    description: "어제 조종실 해치를 억지로 연 탓인지, 수송선의 보조 전력이 가동되며 방어용 소형 경비 오토마톤 한 기가 붉은 탐지등을 껌벅이며 침입자 배제 경고음을 내뿜습니다.",
+    options: [
+      {
+        text: "철제 창을 꼬나쥐고 보안 로봇을 박살 낸다 (창 필요, 회로/고철 획득)",
+        requiredItem: "spear",
+        consumeItem: false,
+        effect: { health: -20, warmth: -5, hunger: -10, sanity: 10 },
+        rewardItems: [
+          { id: "scrap_circuit", qty: 1 },
+          { id: "metal", qty: 3 }
+        ],
+        resultText: "정면으로 달려드는 오토마톤을 날카로운 철제 창으로 여러 번 찔러 무력화시켰습니다. 소중한 회로와 견고한 고철을 뜯어냈습니다."
+      },
+      {
+        text: "미친 듯이 굴러서 눈더미 뒤로 도망쳐 숨는다 (체력 -10, 체온 -15)",
+        effect: { health: -10, warmth: -15, hunger: -10, sanity: -10 },
+        resultText: "로봇의 난사를 피해 낭떠러지 눈밭으로 굴러떨어졌습니다. 로봇이 한참을 수색하더니 전력 부족으로 멎었습니다. 온몸에 타박상과 한기를 입었습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_5_1",
+    title: "천연 온천지대 - 안개 낀 바위 계곡",
+    description: "유황 냄새와 함께 따뜻한 김이 피어오르는 골짜기를 만납니다. 이곳 어딘가에 온도가 매우 높은 온천의 원천지가 있을 것 같습니다.",
+    options: [
+      {
+        text: "더 뜨거운 온천의 원천을 찾아 계곡 깊이 수색한다 (체온 -10)",
+        effect: { health: 0, warmth: -10, hunger: -5, sanity: 5 },
+        nextChainEventId: "ev_chain_5_2",
+        resultText: "차가운 강바람을 뚫고 무성한 김이 나오는 안쪽 계곡을 기어오르자, 뜨거운 물이 콸콸 뿜어져 나오는 신기한 동굴 입구를 발견했습니다."
+      },
+      {
+        text: "바람이 덜 부는 열기 근처에서 안전하게 쉰다 (체온 +20, 정신력 +10)",
+        effect: { health: 5, warmth: 20, hunger: -5, sanity: 10 },
+        resultText: "무작정 수색하기보다는 온천의 따스한 열기로 몸을 덥히며 피로를 씻어냈습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_5_2",
+    title: "천연 온천지대 - 약초 군락과 유황 가스",
+    description: "온천의 원천 동굴 벽면에는 지열을 받아 파랗게 자란 희귀 약초들이 자생하고 있습니다. 하지만 바위 틈에서 누런 유황 독가스가 뿜어져 나와 호흡을 위협합니다.",
+    options: [
+      {
+        text: "천으로 마스크를 엮어 가스를 막고 약초를 채집한다 (천 소모, 약초 4개 획득)",
+        requiredItem: "cloth",
+        consumeItem: true,
+        effect: { health: 5, warmth: 0, hunger: -5, sanity: 10 },
+        rewardItems: [{ id: "herb", qty: 4 }],
+        nextChainEventId: "ev_chain_5_3",
+        resultText: "젖은 천으로 안면을 굳게 차단하고 뜨거운 바위벽을 타올라 향이 아주 강한 상급 약초들을 듬뿍 캐내 챙겼습니다."
+      },
+      {
+        text: "마스크 없이 숨을 참고 몇 송이만 뜯고 탈출한다 (체력 -15, 약초 1개 획득)",
+        effect: { health: -15, warmth: 5, hunger: -5, sanity: 5 },
+        rewardItems: [{ id: "herb", qty: 1 }],
+        nextChainEventId: "ev_chain_5_3",
+        resultText: "숨을 참다가 기침을 하며 유황 가스를 들이마시고 말았습니다! 가슴이 찢어질 듯 아프지만, 가볍게 쓸 약초 하나는 건졌습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_5_3",
+    title: "천연 온천지대 - 붕괴되는 약한 지반",
+    description: "온천 동굴의 기어 오른 벽면이 지열과 습기로 인해 급격히 붕괴되기 시작합니다! 바위들이 요란한 소리를 내며 머리 위로 쏟아져 내립니다.",
+    options: [
+      {
+        text: "배낭을 등 위로 꽉 움켜쥐고 구르듯 도망친다 (체력 -15, 포만감 -15)",
+        effect: { health: -15, warmth: -5, hunger: -15, sanity: -5 },
+        resultText: "가까스로 동굴 밖으로 기어 나와 굴러떨어집니다. 다리와 허리에 타박상을 겪었으나 다행히 캐둔 배낭의 수확은 지켰습니다."
+      },
+      {
+        text: "동굴 구석의 단단해 보이는 화강암 틈새로 몸을 숨긴다 (체력 -5, 체온 -10)",
+        effect: { health: -5, warmth: -10, hunger: -5, sanity: -10 },
+        resultText: "좁은 바위 틈에 머리를 박고 웅크렸습니다. 먼지가 안을 뒤덮고 한기가 들었지만, 큰 붕괴 잔해들이 비켜나가 가벼운 생채기만 겪었습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_6_1",
+    title: "떠돌이 상인 구조 - 고립된 마차",
+    description: "눈보라 속에서 수많은 잡화가 실린 커다란 짐마차를 끌다 진흙과 얼음 구덩이에 바퀴가 고장 나 꼼짝없이 고립된 떠돌이 상인을 만납니다. 늑대 소리가 가까워져 다급해 보입니다.",
+    options: [
+      {
+        text: "장작 나무를 괴어 마차 바퀴를 올리는 걸 돕는다 (나뭇가지 2개 소모, 체력 -15)",
+        requiredItem: "wood",
+        consumeItem: true, // 1개 소모지만 로직에 맞춤
+        effect: { health: -15, warmth: -10, hunger: -15, sanity: 10 },
+        nextChainEventId: "ev_chain_6_2",
+        resultText: "장작 나무를 지렛대로 삼고 으랏차차 기운을 내어 마차를 무거운 구덩이 밖으로 굴려냈습니다. 상인은 숨을 헐떡이며 깊이 감사합니다."
+      },
+      {
+        text: "미안하지만, 마차 틈에서 물건만 훔쳐 몰래 도망친다 (천/성냥 획득, 정신력 -20)",
+        effect: { health: 0, warmth: -5, hunger: -5, sanity: -20 },
+        rewardItems: [
+          { id: "cloth", qty: 2 },
+          { id: "matches", qty: 1 }
+        ],
+        resultText: "혼란스러운 틈을 타 마차 뒤편에서 방한용 천 조각들과 성냥 한 갑을 몰래 주머니에 넣고 줄행랑을 쳤습니다. 죄책감이 심하게 듭니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_6_2",
+    title: "떠돌이 상인 구조 - 텐트로 찾아온 은혜",
+    description: "어제 마차 탈출을 도와준 고마운 떠돌이 상인이 썰매 자국을 따라 텐트 근처로 조심히 다가옵니다. 그는 고마움의 표시로 가방에서 보따리를 꺼냅니다.",
+    options: [
+      {
+        text: "그가 대접하는 보답 선물을 받는다 (차/구운고기 획득, 정신력 +20)",
+        effect: { health: 15, warmth: 25, hunger: 15, sanity: 20 },
+        rewardItems: [
+          { id: "herb_tea", qty: 1 },
+          { id: "cooked_meat", qty: 1 }
+        ],
+        resultText: "상인이 건넨 따뜻한 약초 차를 마시고 기름진 구운 고기를 베어 물어 피로가 말끔히 풀렸습니다. 훈훈한 정이 전해집니다."
+      },
+      {
+        text: "무기가 장착되어 있으니 그를 털어 보려 협박한다 (창 필요, 고철 획득, 정신력 -30)",
+        requiredItem: "spear",
+        consumeItem: false,
+        effect: { health: -10, warmth: -5, hunger: -5, sanity: -30 },
+        rewardItems: [{ id: "metal", qty: 3 }],
+        resultText: "철제 창을 상인의 목 끝에 갖다 대며 협박하자, 사색이 된 상인이 짐차에 있던 고철 판 뭉치들을 다 쏟아두고 다급히 썰매를 몰아 달아납니다. 양심을 팔았습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_7_1",
+    title: "고대 얼음 신전 - 거대한 석조 기둥",
+    description: "눈보라가 몰아치는 설산 절벽 사이에, 눈과 얼음으로 굳어진 신화 속 신전의 기둥들이 웅장하게 서 있는 유적 입구를 마주합니다. 입구 돌판에 정교한 고대 문자가 새겨져 있습니다.",
+    options: [
+      {
+        text: "머리를 아프게 쥐어짜며 고대 룬 문자를 분석한다 (정신력 -10)",
+        effect: { health: 0, warmth: -5, hunger: -5, sanity: -10 },
+        nextChainEventId: "ev_chain_7_2",
+        resultText: "문자를 한 자 한 자 분석하자, 고대 신전 깊은 곳의 수호령 봉인을 잠재우고 통로를 여는 작동 스위치를 찾아내 쾅 소리와 함께 누릅니다."
+      },
+      {
+        text: "장난치지 말고 석조상 눈의 반짝이는 원광을 뜯는다 (고철 2개 획득, 체력 -10)",
+        effect: { health: -10, warmth: -10, hunger: -10, sanity: 0 },
+        rewardItems: [{ id: "metal", qty: 2 }],
+        resultText: "조각상의 금속 장식 쳇바퀴를 강제로 뜯어내어 단단한 고철 조각을 얻었으나, 그 외에 다른 신전 문은 요지부동입니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_7_2",
+    title: "고대 얼음 신전 - 깊은 지하 묘실",
+    description: "어제 룬 문자를 해독한 덕분에 지상으로 통하는 계단이 스르륵 열리고 차가운 푸른 안개가 가득 솟아오르는 지하 묘실이 노출되었습니다. 내부가 완전히 캄캄합니다.",
+    options: [
+      {
+        text: "귀한 성냥불을 켜서 조심스레 지하로 내려간다 (성냥 소모, 체온 -15)",
+        requiredItem: "matches",
+        consumeItem: true,
+        effect: { health: 0, warmth: -15, hunger: -10, sanity: 5 },
+        nextChainEventId: "ev_chain_7_3",
+        resultText: "흔들리는 불꽃을 지탱하며 아래로 내려서자, 먼지가 뒤덮이고 꽁꽁 언 얼음 기둥 제단 위에 신비롭게 떠 있는 아티팩트를 발견했습니다."
+      },
+      {
+        text: "위험해 보이니 동굴 입구에서 한기만 쬐며 대기한다 (체온 -10)",
+        effect: { health: 0, warmth: -10, hunger: -5, sanity: -5 },
+        resultText: "어둠에 발을 들이지 않기로 합니다. 입구에 기대 앉아 찬 바람을 맞으며 불안과 싸웁니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_7_3",
+    title: "고대 얼음 신전 - 수호령의 봉인 덫",
+    description: "제단 위에서 푸르게 반짝이는 고대 서리 에너지 결정을 조심스레 쥐는 순간, 벽면의 얼음이 깨지며 고대 수호 기계의 잔해가 파지지직 전기 침을 내뿜으며 함정을 가동합니다!",
+    options: [
+      {
+        text: "방전되는 한기를 몸으로 받아내며 코어를 탈취한다 (체력 -30, 코어 획득)",
+        effect: { health: -30, warmth: -15, hunger: -10, sanity: 15 },
+        rewardItems: [{ id: "energy_core", qty: 1 }],
+        resultText: "지독한 고압의 번개 한기를 머리와 가슴으로 받아내며 기어이 결정을 쥐고 밖으로 굴러 나왔습니다. 몸은 엉망이지만 신비로운 에너지 코어를 획득했습니다."
+      },
+      {
+        text: "결정을 놔두고 제단 아래 바닥으로 굴러 문밖으로 튄다 (체력 -5)",
+        effect: { health: -5, warmth: -10, hunger: -5, sanity: -10 },
+        resultText: "아티팩트를 포기하고 뒤로 넘어져 뒹굴었습니다. 기계가 쾅 닫히고 지하는 무너졌습니다. 겨우 목숨은 건졌지만 허탈합니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_8_1",
+    title: "버려진 연구소 해치 - 철제 잠금 장치",
+    description: "빙하 언덕 한구석에 반쯤 파묻힌 채 군용 마크가 선명한 두껍고 녹슨 비밀 지하 기지의 원형 해치 문을 발견했습니다. 강한 전기 코드가 잠겨 있습니다.",
+    options: [
+      {
+        text: "고철을 쐐기로 문 틈을 쇠망치로 힘껏 때려 벌린다 (고철 소모, 체력 -10)",
+        requiredItem: "metal",
+        consumeItem: true,
+        effect: { health: -10, warmth: -10, hunger: -15, sanity: 5 },
+        nextChainEventId: "ev_chain_8_2",
+        resultText: "고철을 지렛대로 쑤셔 넣고 쿵쿵 내리치자 톱니가 어긋나며 해치가 묵직한 마찰음을 내며 안으로 덜컹 열렸습니다."
+      },
+      {
+        text: "정밀 회선 단자들을 분석하여 전자 해제를 시도한다 (정신력 -15)",
+        effect: { health: 0, warmth: -5, hunger: -10, sanity: -15 },
+        nextChainEventId: "ev_chain_8_2",
+        resultText: "회로 선의 배치를 연구하며 단자를 수동으로 조율하자 비프음과 함께 철컥하고 잠금이 안전하게 해제되었습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_8_2",
+    title: "버려진 연구소 해치 - 비상 화학 약품 보관함",
+    description: "해치 아래쪽 방에는 과거 연구원들이 비상 수납장에 두고 간 동결된 특수 식량 캔들과 여러 화학 실험 자재들이 먼지 속에 어지럽게 뒤엉켜 잔뜩 널려있습니다.",
+    options: [
+      {
+        text: "비상 약품과 고영양 식량들을 챙긴다 (구급상자/구운고기 획득, 정신력 +15)",
+        effect: { health: 15, warmth: 10, hunger: 30, sanity: 15 },
+        rewardItems: [
+          { id: "medkit", qty: 1 },
+          { id: "cooked_meat", qty: 2 }
+        ],
+        resultText: "밀봉이 해제되지 않은 군용 구급 케이스 1개와 열을 가해 조리할 수 있는 영양 고기캔들을 주워 챙겨 든든하게 흡입했습니다."
+      },
+      {
+        text: "화학 반응을 지탱해 정밀 전자기 회로를 결합해 본다 (회로/구리선 획득, 체온 -10)",
+        effect: { health: 0, warmth: -10, hunger: -5, sanity: 10 },
+        rewardItems: [
+          { id: "scrap_circuit", qty: 2 },
+          { id: "wire", qty: 2 }
+        ],
+        resultText: "실험실에 남아있는 땜납 인두기와 기판을 결합하여 고성능 제어 회로판 2개와 깨끗한 구리 전선들을 조립해 냈습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_9_1",
+    title: "의문의 조난 조명 신호 - 푸른 조명탄",
+    description: "한 치 앞도 보이지 않는 어두운 한밤중에 하늘 위로 휘익 소리를 내며 푸른색 야광 조명탄 하나가 포물선을 그리며 떨어지는 광경을 멀리 목격했습니다.",
+    options: [
+      {
+        text: "위험을 뚫고 신호 발사 원점을 향해 서둘러 달린다 (체온 -15, 포만감 -10)",
+        effect: { health: -5, warmth: -15, hunger: -10, sanity: 5 },
+        nextChainEventId: "ev_chain_9_2",
+        resultText: "눈더미를 무작정 헤치며 푸른빛의 잔광이 남은 바위 언덕 끝자락으로 밤새 힘차게 달려나갑니다."
+      },
+      {
+        text: "함정이나 악당의 수작일지 모르니 반대로 우회한다 (정신력 -5)",
+        effect: { health: 0, warmth: 0, hunger: 0, sanity: -5 },
+        resultText: "눈밭의 밤은 잔인합니다. 불필요한 마주침을 피하고자 조용히 발걸음을 반대로 꺾고 경계합니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_9_2",
+    title: "의문의 조난 조명 신호 - 버려진 조명탄 투척기",
+    description: "신호 발사 근처에 오자 사람은 흔적도 없고, 굳어버린 눈구덩이 속에 거치식 삼각 신호탄 장치와 방수 천으로 돌돌 싸인 보급 가방만 조용히 버려져 있는 것을 발견했습니다.",
+    options: [
+      {
+        text: "보급 백 안의 물건을 신속히 뜯어 챙긴다 (성냥/물/구운물고기 획득)",
+        effect: { health: 15, warmth: 20, hunger: 20, sanity: 15 },
+        rewardItems: [
+          { id: "matches", qty: 3 },
+          { id: "water", qty: 1 },
+          { id: "cooked_fish", qty: 1 }
+        ],
+        resultText: "방수 가방을 찢자 안에서 고성능 성냥통과 마실 수 있는 얼지 않은 생수병, 노릇하게 보존된 군용 구운 물고기가 나왔습니다! 훌륭한 만찬입니다."
+      },
+      {
+        text: "저격수 함정을 대비해 엄폐물 뒤에서 바짝 엎드린다 (체온 -10)",
+        effect: { health: 0, warmth: -10, hunger: -5, sanity: -10 },
+        resultText: "바위 뒤에 엎드려 밤새 주변을 감시했으나 아무것도 움직이지 않았습니다. 뼈가 시리게 춥기만 한 긴장된 밤이었습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_10_1",
+    title: "눈올빼미의 길잡이 - 상처 입은 날개",
+    description: "눈밭의 고목 밑 틈바구니에서 날개 깃털이 피로 얼룩져 눈 속에 처박힌 채 가늘게 퍼덕이고 있는 거대한 설산 눈올빼미 한 마리를 마주합니다. 큰 까마귀의 습격을 받은 것 같습니다.",
+    options: [
+      {
+        text: "가진 약초를 조심히 바르고 붕대로 고정해 준다 (약초 소모, 정신력 +10)",
+        requiredItem: "herb",
+        consumeItem: true,
+        effect: { health: 0, warmth: -5, hunger: -5, sanity: 10 },
+        nextChainEventId: "ev_chain_10_2",
+        resultText: "올빼미가 쪼려고 부리를 부딪쳤지만, 조심히 약초를 바르고 천으로 묶어주었습니다. 올빼미가 잠시 깃털을 가다듬더니 숲의 가지 위로 날아오릅니다."
+      },
+      {
+        text: "생존이 우선이다. 모피 깃털을 뽑아 챙기고 올빼미를 쫓는다 (깃털 3개 획득, 정신력 -15)",
+        effect: { health: -5, warmth: 0, hunger: 0, sanity: -15 },
+        rewardItems: [{ id: "feather", qty: 3 }],
+        resultText: "차가운 이성으로 올빼미의 고운 방한용 솜깃털을 뜯어냈습니다. 올빼미는 비명을 지르며 절뚝거리며 눈더미로 숨어들었습니다. 마음이 뒤숭숭합니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_10_2",
+    title: "눈올빼미의 길잡이 - 올빼미의 하늘 길",
+    description: "하늘에서 끼익- 하는 맑은 새의 울음소리가 메아리칩니다. 어제 치료해 준 거대 올빼미가 하늘을 맴돌며 날갯짓을 해대며 앞장서 가라는 신호를 보내옵니다.",
+    options: [
+      {
+        text: "올올이 날아가는 새의 길을 열심히 쫓아간다 (새알/나뭇가지 획득, 정신력 +15)",
+        effect: { health: 0, warmth: -10, hunger: -10, sanity: 15 },
+        rewardItems: [
+          { id: "egg", qty: 3 },
+          { id: "wood", qty: 2 }
+        ],
+        resultText: "눈구덩이를 밟아가며 새의 은은한 인도를 따르자, 다른 천적의 눈이 닿지 않은 마른 활엽수 아래 조밀하게 보존된 둥지를 발견해 새알과 땔감을 챙겼습니다."
+      },
+      {
+        text: "야생 조류의 뇌는 믿을 수 없다. 제 갈 길을 간다 (정신력 -5)",
+        effect: { health: 0, warmth: 0, hunger: 0, sanity: -5 },
+        resultText: "지도를 더 믿기로 하며 올올이 날아오르는 새를 뒤로하고 혼자 쓸쓸한 길을 걷습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_11_1",
+    title: "설산의 눈사태 위기 - 요란한 진동",
+    description: "갑자기 산 정상 쪽에서 쿠르릉거리는 둔탁한 소리와 함께 하늘높이 거대한 하얀 폭풍 연기가 치솟습니다. 엄청난 규모의 눈사태 폭풍이 당신을 덮치려 내려옵니다!",
+    options: [
+      {
+        text: "아래쪽 가파른 바위 계곡 입구로 몸을 던져 뛰어내린다 (체력 -15, 정신력 -10)",
+        effect: { health: -15, warmth: -10, hunger: -5, sanity: -10 },
+        nextChainEventId: "ev_chain_11_2",
+        resultText: "위험을 무릅쓰고 아래로 뛰어내려 뒹굴었습니다. 눈사태의 거대한 끝자락 파도가 온몸을 덮치고 짓누르기 시작합니다!"
+      },
+      {
+        text: "간이 텐트를 펴서 바위벽에 단단히 고정하고 웅크린다 (텐트 소모)",
+        requiredItem: "tent",
+        consumeItem: true,
+        effect: { health: -5, warmth: -5, hunger: -5, sanity: 5 },
+        nextChainEventId: "ev_chain_11_2",
+        resultText: "바위틈에 텐트의 단단한 지지대를 쐐기로 박고 몸을 말아 밀착시켰습니다. 텐트 위로 거대한 눈사태의 폭풍 압력이 강타하며 사방이 하얗게 묻힙니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_11_2",
+    title: "설산의 눈사태 위기 - 눈 속에 파묻힌 숨결",
+    description: "눈더미 속에 깊이 파묻혀 사방이 완전히 캄캄하고 손끝 하나 움직이기 어렵습니다. 가슴이 심하게 압박되며 산소 부족과 지독한 얼음 한기가 폐 속으로 파고듭니다.",
+    options: [
+      {
+        text: "온 힘을 모아 사지발로 눈벽을 강제로 긁어 헤친다 (체력 -20, 체온 -20)",
+        effect: { health: -20, warmth: -20, hunger: -15, sanity: -10 },
+        nextChainEventId: "ev_chain_11_3",
+        resultText: "손톱이 깨져 피가 흐를 때까지 얼음 흙을 파헤쳐 위쪽 구멍으로 기어올라 숨을 쉬었습니다. 온몸의 손가락이 동상으로 타들어 가는 고통을 느낍니다."
+      },
+      {
+        text: "철제 창을 머리 위 지지대로 꽂아 산소 틈을 확보한다 (창 필요, 체력 -5)",
+        requiredItem: "spear",
+        consumeItem: false,
+        effect: { health: -5, warmth: -10, hunger: -5, sanity: 10 },
+        nextChainEventId: "ev_chain_11_3",
+        resultText: "철제 창의 긴 샤프트를 이용해 윗눈을 수직으로 뚫어 숨구멍을 뚫고 버텼습니다. 질식을 예방하며 체력을 축적해 서서히 눈 늪 밖으로 걸어 나왔습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_11_3",
+    title: "설산의 눈사태 위기 - 극한의 동상 쇼크",
+    description: "가까스로 지상으로 탈출했으나 전신이 얼음 물에 심하게 젖어 사시나무 떨듯 오한이 일며 감각을 잃어갑니다. 이대로 있으면 밤바람에 심장이 멈추어 생을 마감할 것입니다.",
+    options: [
+      {
+        text: "비상 모닥불을 피워 전신의 옷을 말리고 몸을 달군다 (모닥불 소모, 스탯 대폭 회복)",
+        requiredItem: "campfire",
+        consumeItem: true,
+        effect: { health: 20, warmth: 45, hunger: 0, sanity: 20 },
+        resultText: "모닥불의 활활 타오르는 화력 옆에 옷을 모두 벗어 널고 몸을 바짝 구워 녹였습니다. 뜨거운 화염 한가운데 서서 가까스로 심장의 고동을 돌렸습니다."
+      },
+      {
+        text: "구급상자의 해열 주사제와 진통 안감을 전량 사용한다 (구급상자 소모, 체력 +30)",
+        requiredItem: "medkit",
+        consumeItem: true,
+        effect: { health: 30, warmth: 15, hunger: -5, sanity: 20 },
+        resultText: "구급상자에서 뽑아낸 아드레날린 주사를 대퇴부에 꽂아 심장에 피를 돌렸습니다. 동상 마비가 서서히 가라앉으며 기력이 돌아옵니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_12_1",
+    title: "신비의 서리꽃 - 눈사람의 보석",
+    description: "빙하 바위벽 갈라진 틈 사이로, 얼어붙은 이슬 결정을 왕관처럼 얹은 채 은은한 에메랄드빛 광채를 뿜는 전설의 조난 치료화 '서리꽃' 한 송이가 빛나고 있습니다.",
+    options: [
+      {
+        text: "조심히 칼끝으로 뿌리 결정을 다치지 않게 캐낸다 (체력 -10, 체온 -10)",
+        effect: { health: -10, warmth: -10, hunger: -5, sanity: 10 },
+        nextChainEventId: "ev_chain_12_2",
+        resultText: "차가운 돌 틈에 무릎을 꿇고 서리꽃의 미세한 인광을 해치지 않도록 조심히 채굴해 가방 깊이 보존했습니다."
+      },
+      {
+        text: "대자연의 신성을 훼손하지 않고 기도를 올린다 (정신력 +15)",
+        effect: { health: 0, warmth: 0, hunger: 0, sanity: 15 },
+        resultText: "꽃을 훼손하는 무례를 피하고 기도를 하자, 가슴 속에 차분한 마음과 삶에 대한 경건한 힘이 스며듭니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_12_2",
+    title: "신비의 서리꽃 - 서리향의 활력",
+    description: "어제 채굴해 온 서리꽃이 밤새 텐트 안을 가득 달콤하고 신선한 박하 향으로 가득 메워 피로가 극도로 정화됩니다. 이 신비한 꽃잎을 활용해야 합니다.",
+    options: [
+      {
+        text: "꽃잎을 끓여 따뜻한 서리 약차로 달여 마신다 (물 소모, 스탯 회복)",
+        requiredItem: "water",
+        consumeItem: true,
+        effect: { health: 30, warmth: 30, hunger: 10, sanity: 30 },
+        resultText: "물에 서리꽃 꽃잎을 동동 띄워 달인 차를 복용했습니다. 놀라운 한기 치유력과 활력이 위장에 머물며 고통스럽던 모든 육체가 말끔히 개어납니다!"
+      },
+      {
+        text: "깃털과 함께 가방 안감에 넣어 수면 베개를 만든다 (정신력 +20, 깃털 획득)",
+        effect: { health: 10, warmth: 10, hunger: 0, sanity: 20 },
+        rewardItems: [{ id: "feather", qty: 2 }],
+        resultText: "꽃잎을 보존 주머니에 넣어 안대 베개를 만들었습니다. 향긋한 잠자리 덕에 다음날 눈가가 맑고 정신력이 충만하게 차오릅니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_13_1",
+    title: "약탈자 정찰대 - 은밀한 발소리",
+    description: "눈보라 장막 너머로, 시뻘건 고글과 투박한 기갑 조끼를 걸친 야생 약탈자 정찰대원 두 명이 쇠파이프를 들고 다가오는 모습을 포착했습니다.",
+    options: [
+      {
+        text: "눈더미 아래에 바짝 납작하게 웅크려 그들이 지나가길 기다린다 (체온 -15)",
+        effect: { health: 0, warmth: -15, hunger: -5, sanity: -10 },
+        nextChainEventId: "ev_chain_13_2",
+        resultText: "눈 속에 몸을 파묻고 숨소리를 참았습니다. 약탈자들은 험악한 욕설을 지껄이며 텐트 근처를 아슬아슬하게 지나쳐 갔습니다."
+      },
+      {
+        text: "철제 창으로 조심조심 뒤를 밟아 기습을 감행한다 (창 필요, 체력 -15)",
+        requiredItem: "spear",
+        consumeItem: false,
+        effect: { health: -15, warmth: -10, hunger: -10, sanity: 5 },
+        nextChainEventId: "ev_chain_13_2",
+        resultText: "눈빛에 의지해 창끝으로 그들의 뒷덜미를 찔러 신속히 무력화시켰습니다. 치열한 육탄전 중에 가벼운 생채기를 입었습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_13_2",
+    title: "약탈자 정찰대 - 피 묻은 가죽 지도",
+    description: "약탈자들이 흘리고 간 보급 배낭 안에서 근방에 구축해 둔 소형 보급 참호의 입구가 표시된 가죽 암호 지도를 발견했습니다. 본대 녀석들이 사방을 여전히 정찰 중인 것 같습니다.",
+    options: [
+      {
+        text: "지도의 암호를 조심스레 분석해 보급창을 턴다 (정신력 -10)",
+        effect: { health: 0, warmth: -5, hunger: -10, sanity: -10 },
+        nextChainEventId: "ev_chain_13_3",
+        resultText: "복잡한 기호 좌표를 분석하여 눈사태 숲속에 은폐된 그들의 전술 보급 해치 위로 우회 수색해 기어들어 갔습니다."
+      },
+      {
+        text: "자취를 지우기 위해 그들의 마차 바퀴 길을 멀리 우회해 도망친다 (체력 -15)",
+        effect: { health: -15, warmth: -10, hunger: -15, sanity: 5 },
+        resultText: "위험한 보급소를 포기하고 발걸음을 감추기 위해 바람이 아주 센 설산 언덕을 크게 우회하여 기지로 철수했습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_13_3",
+    title: "약탈자 정찰대 - 전술 보급창 강탈",
+    description: "지도가 가리킨 둥근 해치 지하에는 그들이 인근 기지에서 탈취한 군용 생존물자와 전술 장비가 박스째 차곡차곡 쌓여 있습니다. 경보 타이머가 울리기 시작합니다!",
+    options: [
+      {
+        text: "군용 전술 조끼와 따뜻한 고기 캔들을 꺼내 입고 튄다 (전술조끼/구운고기 획득)",
+        effect: { health: 20, warmth: 20, hunger: 35, sanity: 20 },
+        rewardItems: [
+          { id: "coat_tactical", qty: 1 },
+          { id: "cooked_meat", qty: 2 }
+        ],
+        resultText: "경보가 울리기 직전 두껍고 튼튼한 군용 전술 조끼를 걸쳐 입고 기름진 구운 고기캔들을 주머니 가득 털어 넣은 채 잽싸게 튀었습니다! 훌륭한 쾌거입니다."
+      },
+      {
+        text: "보급함을 파괴하기 위해 성냥으로 기름에 불을 붙여 폭파한다 (성냥 소모, 고철/선 획득)",
+        requiredItem: "matches",
+        consumeItem: true,
+        effect: { health: -10, warmth: 10, hunger: -5, sanity: 15 },
+        rewardItems: [
+          { id: "metal", qty: 4 },
+          { id: "wire", qty: 2 }
+        ],
+        resultText: "보급함 구석에 윤활유를 붓고 성냥을 던졌습니다. 기지가 크게 폭파되며 파편 중에 구리 배선과 튼튼한 판철 고철더미를 건져 달아났습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_14_1",
+    title: "얼음 호수의 보물 - 빙판 아래의 실루엣",
+    description: "투명하고 단단하게 얼어붙은 강 한가운데 발밑 2미터 아래에 사슬로 감겨 굳어버린 검은색 특수 금속 금고 가방이 훤히 비쳐 보입니다.",
+    options: [
+      {
+        text: "쇠망치와 도구로 두껍게 결빙된 얼음 구멍을 깎는다 (체력 -15, 포만감 -15)",
+        effect: { health: -15, warmth: -10, hunger: -15, sanity: 5 },
+        nextChainEventId: "ev_chain_14_2",
+        resultText: "얼음 톱날과 정으로 쉬지 않고 파내자 마침내 사슬 고리가 달린 차가운 쇠 상자를 지상으로 끌어올렸습니다."
+      },
+      {
+        text: "얼음이 얇아 위험할 수 있으니 스케이트를 타고 지나친다 (정신력 +10)",
+        effect: { health: 0, warmth: 0, hunger: 0, sanity: 10 },
+        resultText: "안전이 우선입니다. 위험한 살얼음판 위를 슥 미끄러져 건너며 등 뒤의 보물을 깨끗하게 포기합니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_14_2",
+    title: "얼음 호수의 보물 - 고전압 이중 자물쇠",
+    description: "호수에서 꺼낸 차가운 철제 금고는 기계식 회전 다이얼과 감전 보호 장치가 내장된 단단한 문으로 잠겨 있습니다. 틈새를 억지로 쑤시면 감전될 우려가 있습니다.",
+    options: [
+      {
+        text: "다이얼의 진동을 느끼며 정밀하게 해독한다 (정신력 -15, 고급 보상 획득)",
+        effect: { health: 0, warmth: -5, hunger: -5, sanity: -15 },
+        rewardItems: [
+          { id: "energy_core", qty: 1 },
+          { id: "steel_plate", qty: 1 },
+          { id: "wire", qty: 2 }
+        ],
+        resultText: "다이얼 회전 홈을 소리로 하나씩 맞춰가며 해제하자, 철컥하며 에너지 코어 1개와 정밀하게 벼린 강철 판재, 구리 배선들이 쏟아져 나옵니다."
+      },
+      {
+        text: "고철을 박아 자물쇠 다이얼을 쿵쿵 내리쳐 부순다 (체력 -10, 고철/선 획득)",
+        effect: { health: -10, warmth: -5, hunger: -5, sanity: 5 },
+        rewardItems: [
+          { id: "metal", qty: 3 },
+          { id: "wire", qty: 1 }
+        ],
+        resultText: "감전 방지를 위해 털장갑을 끼고 쇠망치로 자물쇠 다이얼을 깨부수었습니다. 약한 감전으로 팔이 저릿하지만, 깨진 부속 중에 고철과 전선을 확보했습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_15_1",
+    title: "눈먼 늙은 현자 - 조용한 가죽 막사",
+    description: "눈보라가 몰아치는 숲 한구석에 짐승 모피로 엉성하게 얽어 만든 텐트 안에서 낡은 화로 앞에 눈을 감고 정중히 가부좌를 틀고 있는 눈먼 늙은 사냥꾼 현자를 만납니다.",
+    options: [
+      {
+        text: "현자 옆에 앉아 공손하게 생존의 지혜를 구한다 (정신력 +15)",
+        effect: { health: 0, warmth: 5, hunger: -5, sanity: 15 },
+        nextChainEventId: "ev_chain_15_2",
+        resultText: "현자는 당신의 거친 호흡을 듣고 따뜻하게 맞아주며, 설산의 추위와 마음의 두려움을 극복하는 깊고 명상적인 이야기를 들려줍니다."
+      },
+      {
+        text: "늙은이가 눈이 먼 틈을 타 구석의 건조 장작들을 들고 튄다 (나뭇가지 4개 획득)",
+        effect: { health: 0, warmth: 0, hunger: 0, sanity: -25 },
+        rewardItems: [{ id: "wood", qty: 4 }],
+        resultText: "구석에 곱게 말려둔 나뭇가지 장작들을 가방 가득 훔쳐서 밖으로 도망쳤습니다. 도덕성이 망가지며 마음속 한편이 깊이 찔려옵니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_15_2",
+    title: "눈먼 늙은 현자 - 자연과의 동화",
+    description: "어제 눈먼 현자와 대화를 나누며 깨달은 야생 속 침착성이 신체 구석구석에 평안함으로 전해집니다. 아침에 일어나자 텐트 입구에 선물 보따리가 걸려 있습니다.",
+    options: [
+      {
+        text: "가르침을 되새기며 정신을 굳건히 한다 (정신력 +30, 체력 +10)",
+        effect: { health: 10, warmth: 0, hunger: 0, sanity: 30 },
+        resultText: "대자연에 순응하고 차분함을 갖는 법을 깨달아, 생존에 대한 불안과 공포가 완전히 밀려나고 기운이 가득 차오릅니다."
+      },
+      {
+        text: "그가 텐트 입구에 걸어둔 야생 약초 우린 차를 마신다 (약초 차 획득, 체온 +25)",
+        effect: { health: 15, warmth: 25, hunger: 0, sanity: 20 },
+        rewardItems: [{ id: "herb_tea", qty: 1 }],
+        resultText: "현자가 말려 보관해 둔 향긋한 야생 약초 달인 차를 복용했습니다. 얼어붙은 위장이 스르륵 녹으며 몸 전체에 더운 온기가 흘러넘칩니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_16_1",
+    title: "광폭한 들개 - 굶주린 엄습",
+    description: "추위에 이성을 잃고 핏빛 침을 흘리며 이빨을 훤히 드러낸 사나운 야생 들개 세 마리가 설산 고목 사이로 맹렬하게 포위하며 달려듭니다.",
+    options: [
+      {
+        text: "철제 창을 휘두르며 들개들과 정면 승부를 겨룬다 (창 필요, 체력 -20, 고기 획득)",
+        requiredItem: "spear",
+        consumeItem: false,
+        effect: { health: -20, warmth: -5, hunger: -5, sanity: 5 },
+        rewardItems: [{ id: "raw_meat", qty: 1 }],
+        nextChainEventId: "ev_chain_16_2",
+        resultText: "달려드는 우두머리 들개에게 철제 창을 깊이 찔러 숨통을 끊었습니다. 남은 들개들은 낑낑대며 숲 저편으로 멀리 달아납니다."
+      },
+      {
+        text: "가방에서 생고기들을 던져 들개들을 분산시킨다 (생고기 소모, 도망침)",
+        requiredItem: "raw_meat",
+        consumeItem: true, // 1개 소모
+        effect: { health: 0, warmth: -5, hunger: 0, sanity: 10 },
+        nextChainEventId: "ev_chain_16_2",
+        resultText: "생고기를 멀리 던져주자 들개들이 으르렁대며 고기에 달려들어 정신을 잃는 사이에 바위벽 뒤로 잽싸게 몸을 숨겼습니다."
+      },
+      {
+        text: "맨손과 몸으로 개들의 이빨 공격을 억지로 버텨낸다 (체력 -35, 정신력 -20)",
+        effect: { health: -35, warmth: -5, hunger: -10, sanity: -20 },
+        nextChainEventId: "ev_chain_16_2",
+        resultText: "개들의 집단 난입에 옷이 찢기고 다리와 팔을 깊이 물렸습니다. 돌멩이를 휘둘러 한 마리의 코뼈를 깨자 낑낑거리며 도망칩니다. 온몸이 피와 흙에 젖어 엉망입니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_16_2",
+    title: "광폭한 들개 - 핏빛 동굴 소굴",
+    description: "물리친 들개들의 핏자국 궤적을 쫓아가자, 썩은 가죽 텐트더미 옆에 그들이 보금자리로 삼은 깊고 컴컴하며 냄새가 지독하게 뿜어져 나오는 동굴 틈새를 찾아냅니다.",
+    options: [
+      {
+        text: "혹시 모를 들개의 잔해와 수확을 위해 조심히 탐색한다 (체온 -10)",
+        effect: { health: -5, warmth: -10, hunger: -5, sanity: -5 },
+        nextChainEventId: "ev_chain_16_3",
+        resultText: "바람을 뚫고 좁고 냄새나는 동굴 안으로 깊이 포복해 기어들어 갑니다. 동굴 안쪽 구석진 둥지에 무언가 반짝이는 물체들이 보입니다."
+      },
+      {
+        text: "끔찍한 악취와 습기가 가득하니 입구를 얼음 돌로 채워 막고 떠난다 (정신력 -5)",
+        effect: { health: 0, warmth: 0, hunger: 0, sanity: -5 },
+        resultText: "더러운 동물 소굴에 들어가는 위험을 피하고 조용히 자리를 이동해 안전을 유지합니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_16_3",
+    title: "광폭한 들개 - 탐험대의 참혹한 유품",
+    description: "들개 동굴 소굴 가장 깊숙한 뼈 무덤더미 속에서, 과거 그들에게 습격받아 사망한 것으로 추정되는 군인 탐험대원의 찢어진 생존 가방과 의복 잔해들을 발굴해 냅니다.",
+    options: [
+      {
+        text: "가방에서 보존 상태가 좋은 가죽 장화를 도려낸다 (가죽 장화 획득, 정신력 -10)",
+        effect: { health: 5, warmth: 10, hunger: 0, sanity: -10 },
+        rewardItems: [{ id: "boots_leather", qty: 1 }],
+        resultText: "피 묻은 군용 가죽 장화 1켤레를 물티슈로 정성껏 닦아내 발에 걸쳐 신었습니다. 발가락이 매우 따뜻하고 단단해진 느낌이 듭니다."
+      },
+      {
+        text: "비상 약품 케이스에서 깨끗한 구급상자를 인양한다 (구급상자 획득, 정신력 +10)",
+        effect: { health: 10, warmth: 0, hunger: 0, sanity: 10 },
+        rewardItems: [{ id: "medkit", qty: 1 }],
+        resultText: "지퍼가 굳게 잠겨 보존된 온전한 구급상자 1개를 회수했습니다. 구급품들이 소중하게 쓰일 것입니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_17_1",
+    title: "눈더미 속 수송 트럭 - 봉쇄된 고속도로 잔해",
+    description: "얼어붙은 협곡 길목 중턱에서 눈사태로 쓸려 내려와 차체가 뒤틀린 채 깊이 파묻혀 있는 오래된 민간 수송 트럭을 만납니다. 꽁꽁 얼어붙은 짐칸은 두꺼운 쇠사슬이 잠겨 있습니다.",
+    options: [
+      {
+        text: "트럭 운전석 차창 유리를 돌로 깨고 안으로 들어간다 (체온 -10)",
+        effect: { health: -5, warmth: -10, hunger: -5, sanity: 5 },
+        nextChainEventId: "ev_chain_17_2",
+        resultText: "유리를 부수어 눈바람을 맞아가며 운전석 내부 대시보드를 수색한 끝에, 글로브 박스 뒤에서 짐칸의 특수 다중 안전 열쇠 뭉치를 찾아냈습니다."
+      },
+      {
+        text: "쇠뭉치를 지렛대로 써서 사슬 틈을 마구 때려 뜯는다 (고철 3개 획득, 체력 -10)",
+        effect: { health: -10, warmth: -10, hunger: -10, sanity: -5 },
+        rewardItems: [{ id: "metal", qty: 3 }],
+        resultText: "쇠망치로 사슬 고리를 몇 번이고 쾅쾅 때려 부수어 조각난 고철 자재들을 획득했지만, 짐칸 내부는 단단히 밀봉되어 더는 열 수 없습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_17_2",
+    title: "눈더미 속 수송 트럭 - 비밀 운송 품목",
+    description: "어제 찾은 다중 안전 열쇠로 트럭 짐칸의 이중 밀폐 보관함을 여는 데 성공합니다! 건조하게 유지된 격실 속에서 무거운 비닐 보급 보자기들이 튀어나옵니다.",
+    options: [
+      {
+        text: "방수 비닐 속 기계 가동용 전동 모터를 챙긴다 (모터/선/고철 획득)",
+        effect: { health: 0, warmth: -5, hunger: -5, sanity: 10 },
+        rewardItems: [
+          { id: "electric_motor", qty: 1 },
+          { id: "wire", qty: 2 },
+          { id: "metal", qty: 2 }
+        ],
+        resultText: "녹슬지 않고 보존된 기계 제작의 핵심 부품인 전동 모터 1개와 구리 배선, 고철 프레임들을 배낭에 챙겼습니다."
+      },
+      {
+        text: "부드럽고 깨끗한 단열용 비상 천과 성냥들을 챙긴다 (천/성냥 획득)",
+        effect: { health: 5, warmth: 15, hunger: 0, sanity: 15 },
+        rewardItems: [
+          { id: "cloth", qty: 2 },
+          { id: "matches", qty: 2 }
+        ],
+        resultText: "두툼한 단열 비상 천 조각 2개와 눅눅해지지 않은 마른 성냥들을 챙겼습니다. 오늘 밤은 텐트가 훨씬 따뜻할 것입니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_18_1",
+    title: "빙하 거울 조각상 - 푸른 빙벽",
+    description: "칼날처럼 날카롭고 웅장한 빙하 골짜기 절벽 틈 사이에, 햇빛을 반사하여 거울처럼 투명하게 주변을 비추고 있는 고대 인간 형태의 기묘한 얼음 조각상이 서 있습니다.",
+    options: [
+      {
+        text: "얼음 거울 조각상 앞에 서서 자신의 참혹한 모습을 성찰한다 (정신력 +10)",
+        effect: { health: 0, warmth: -5, hunger: -5, sanity: 10 },
+        nextChainEventId: "ev_chain_18_2",
+        resultText: "얼굴에 성에와 피가 가득 묻은 생존의 몰골을 거울 속에 마주했습니다. 삶과 조난에 대한 깊은 경외심이 몰려옵니다."
+      },
+      {
+        text: "눈부신 반사광이 거슬리니 돌로 머리 부분을 때려부순다 (정신력 -15)",
+        effect: { health: -5, warmth: 0, hunger: 0, sanity: -15 },
+        resultText: "조각상을 돌로 쳐 완전히 박살 내버렸습니다. 아름다운 얼음 결정들이 사방으로 튀며 깨집니다. 마음이 허전하고 뒤숭숭합니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_18_2",
+    title: "빙하 거울 조각상 - 성찰의 길몽",
+    description: "어제 얼음 거울 조각상에서 마주한 내면의 얼굴과 투쟁이 밤새도록 기묘하고 아름다운 극지 숲의 평화로운 길몽으로 이어져 마음의 상처를 치유합니다.",
+    options: [
+      {
+        text: "꿈의 숭고한 계시를 받아들이고 마음을 굳건히 다잡는다 (정신력 +25, 체력 +10)",
+        effect: { health: 10, warmth: 0, hunger: 0, sanity: 25 },
+        resultText: "잠에서 깨자 머리가 무척 가볍고 정신이 또렷해집니다. 반드시 구조되어 살아가겠다는 강한 의지가 타오릅니다."
+      },
+      {
+        text: "꿈의 불안함을 누르기 위해 상비 약초를 잘게 씹어 삼킨다 (약초 소모, 체력 +15)",
+        requiredItem: "herb",
+        consumeItem: true,
+        effect: { health: 15, warmth: 5, hunger: 0, sanity: 10 },
+        resultText: "아린 약초를 씹어 마음을 가라앉혔습니다. 뇌에 맴돌던 환영이 멎고 몸에 기운이 충전됩니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_19_1",
+    title: "망가진 비상 발전기 - 정전된 기지 창고",
+    description: "조난 대피소 창고 벽면 구석에 윤활유가 다 새어 나오고 방전된 낡은 군용 비상 발전기가 한기 속에 쓸쓸히 서 있습니다. 전선 배선들이 다 끊겨 있습니다.",
+    options: [
+      {
+        text: "가진 구리선 배선들을 이용해 단자 배선을 수리한다 (구리선 소모, 체온 -10)",
+        requiredItem: "wire",
+        consumeItem: true, // 1개 소모
+        effect: { health: 0, warmth: -10, hunger: -5, sanity: 5 },
+        nextChainEventId: "ev_chain_19_2",
+        resultText: "차가운 구리선을 잘라 모터와 방전 단자에 칭칭 연결하고 스위치를 올렸습니다. 발전기에서 약한 비프 소리가 울리기 시작합니다."
+      },
+      {
+        text: "수리할 전선이 없으니 발로 차 부수어 고철을 뜯는다 (고철 2개 획득, 체력 -10)",
+        effect: { health: -10, warmth: -10, hunger: -10, sanity: -5 },
+        rewardItems: [{ id: "metal", qty: 2 }],
+        resultText: "발로 차고 쇠를 쳐서 내부의 철판 조각 고철 2개를 뜯었습니다. 발전기는 기름을 울컥 토하며 완전히 망가졌습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_19_2",
+    title: "망가진 비상 발전기 - 누전되는 회로 제어판",
+    description: "연결한 배선 틈으로 약하게 모터가 돌아가지만, 제어 컴퓨터 회로판이 시커멓게 불타오르며 누전 스파크를 심하게 튀깁니다. 회로를 교체하지 않으면 폭발할 수 있습니다.",
+    options: [
+      {
+        text: "가진 망가진 회로를 이용해 불탄 부속을 급히 교체한다 (회로 소모, 체력 -5)",
+        requiredItem: "scrap_circuit",
+        consumeItem: true,
+        effect: { health: -5, warmth: -5, hunger: -5, sanity: 10 },
+        nextChainEventId: "ev_chain_19_3",
+        resultText: "스파크 튀는 화상 위험을 무릅쓰고, 가방 속 회로 부품을 끼워 맞춰 노화된 제어 칩을 안전하게 우회시켰습니다. 발전기 소리가 규칙적으로 울립니다."
+      },
+      {
+        text: "감전이나 폭발이 무서우니 가동 스위치를 내리고 철수한다 (정신력 -5)",
+        effect: { health: 0, warmth: 0, hunger: 0, sanity: -5 },
+        resultText: "위험한 전기를 만지는 것을 중단합니다. 발전기는 연기를 쉬익 뿜더니 완전히 멈추어 고요함 속으로 되돌아갔습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_19_3",
+    title: "망가진 비상 발전기 - 빛나는 대피소",
+    description: "발전기가 마침내 활기차게 우우웅- 소리를 내며 웅장하게 돌기 시작합니다! 대피소 내 벽면 라디에이터 열선이 뜨겁게 가열되고, 비상 형광등이 찬란하게 주위를 밝힙니다.",
+    options: [
+      {
+        text: "따뜻한 가열 장치 옆에 누워 깊고 아늑한 잠을 잔다 (스탯 대폭 회복)",
+        effect: { health: 30, warmth: 40, hunger: -5, sanity: 20 },
+        resultText: "지상 천국 같은 따스함 속에서 두꺼운 모포를 덮고 오래간만에 땀이 날 정도의 쾌적하고 든든한 잠을 잘 수 있었습니다!"
+      },
+      {
+        text: "방전 단자 전류를 집중시켜 정밀 에너지 코어를 추출한다 (코어 획득, 체온 +15)",
+        effect: { health: 10, warmth: 15, hunger: -5, sanity: 10 },
+        rewardItems: [{ id: "energy_core", qty: 1 }],
+        resultText: "고전압 단자의 정밀 방전을 조율하여 고테크 장비에 쓰일 완전한 에너지 코어 1개를 추출해 가방에 안전하게 수납했습니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_20_1",
+    title: "크리스탈 광맥 - 은은한 동굴의 보석",
+    description: "얼음 동굴 틈새 속에서 차가운 밤하늘 아래 형형색색의 오로라처럼 신비롭게 빛을 발하는 크리스탈 광석 덩어리를 발견합니다. 기묘한 열기가 뿜어져 나옵니다.",
+    options: [
+      {
+        text: "고철 조각을 정으로 삼아 크리스탈 결정을 조심히 채굴한다 (체력 -15, 포만감 -10)",
+        effect: { health: -15, warmth: -5, hunger: -10, sanity: 10 },
+        nextChainEventId: "ev_chain_20_2",
+        resultText: "손가락이 뻐근해질 때까지 굳은 바위를 두드려, 은은한 열을 내뿜는 붉은색 크리스탈 결정을 안전하게 캐내는 데 성공했습니다."
+      },
+      {
+        text: "크리스탈 광석의 따스한 자연 온기만 손으로 쬐며 쉰다 (체온 +15)",
+        effect: { health: 0, warmth: 15, hunger: -5, sanity: 10 },
+        resultText: "꽃을 훼손하지 않고 다가오는 한기를 쬡니다. 방사되는 열 덕에 손가락의 얼어붙은 한기가 사그라듭니다."
+      }
+    ]
+  },
+  {
+    id: "ev_chain_20_2",
+    title: "크리스탈 광맥 - 광석의 방사 보온성",
+    description: "어제 채굴한 신비로운 크리스탈 결정이 가방 안에서 난로처럼 더운 에너지를 뿜어내며 배낭 내부의 습기를 뽀송뽀송하게 말리고 온기를 유지시켜 줍니다.",
+    options: [
+      {
+        text: "크리스탈을 털모자 안감에 촘촘히 바느질해 넣는다 (천 소모, 정신력 +20, 방한 획득)",
+        requiredItem: "cloth",
+        consumeItem: true,
+        effect: { health: 10, warmth: 30, hunger: 0, sanity: 20 },
+        resultText: "천을 덧대어 모자 속에 크리스탈을 꿰매 넣었습니다. 머리끝부터 흘러내리는 훈훈한 보온력 덕분에 추위의 위협이 멀리 사라집니다."
+      },
+      {
+        text: "크리스탈을 으깨어 전동용 구리 배선과 결합한다 (구리선 소모, 코어 획득)",
+        requiredItem: "wire",
+        consumeItem: true,
+        effect: { health: 0, warmth: 10, hunger: 0, sanity: 10 },
+        rewardItems: [{ id: "energy_core", qty: 1 }],
+        resultText: "크리스탈의 농축 에너지를 구리선에 코일 형태로 촘촘히 엮어, 고테크 부속으로 즉시 활용할 수 있는 에너지 코어 1개를 합성해 냈습니다."
+      }
+    ]
+  },
+  {
     id: "ev_150",
     type: "combat",
     title: "어린 길 잃은 북극곰 유체 조우",

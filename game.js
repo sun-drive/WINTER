@@ -595,6 +595,7 @@ function startGame() {
     eventChosen: false,
     gameStarted: true,
     gameOver: false,
+    activeChainEventId: null,
     equipment: {
       head: null,
       body: null,
@@ -1723,12 +1724,21 @@ function restAction() {
 function triggerRandomEvent() {
   state.eventChosen = false;
   
-  // 생존 일수에 따른 특정 구조 이벤트(50번) 분기 처리
-  // 15일 이상 생존하고 인벤토리에 성냥이나 모닥불이 있다면 50번 구조 이벤트 확률 증가 또는 강제
   let selectedEvent = null;
+  
+  // 연쇄 시나리오 확률 개입 (50% 확률로 다음 연쇄 스토리 강제 실행)
+  if (state.activeChainEventId && Math.random() < 0.5) {
+    const chainEvent = window.survivalEvents.find(ev => ev.id === state.activeChainEventId);
+    if (chainEvent) {
+      selectedEvent = chainEvent;
+      showToast("📜 이전 스토리와 연결되는 상황이 발생했습니다!", "info");
+      state.activeChainEventId = null; // 발생했으므로 정상 복귀
+    }
+  }
+  
   const isAttracting = state.equipment.journals && state.equipment.journals.includes("journal_attraction");
   
-  if (state.day >= 12 && Math.random() < 0.25) {
+  if (!selectedEvent && state.day >= 12 && Math.random() < 0.25) {
     // 12일차 이후 구조선 발견 이벤트 확률 대폭 개입
     selectedEvent = window.survivalEvents.find(ev => ev.id === "ev_50");
   }
@@ -1743,8 +1753,13 @@ function triggerRandomEvent() {
   }
   
   if (!selectedEvent) {
-    // 그 외에는 1~49번 중에서 무작위 추첨
-    let normalEvents = window.survivalEvents.filter(ev => ev.id !== "ev_50");
+    // 그 외에는 1~49번 및 연쇄 시작 스토리 중에서 무작위 추첨
+    let normalEvents = window.survivalEvents.filter(ev => {
+      if (ev.id === "ev_50") return false;
+      // 연쇄 스토리 중 시작 스토리(끝자리가 _1)가 아닌 중간/끝 스토리들은 무작위 풀에서 배제
+      if (ev.id.startsWith("ev_chain_") && !ev.id.endsWith("_1")) return false;
+      return true;
+    });
     if (state.day < 20) {
       // 20일 이전에는 너무 강한 적(예티, 북극곰, 경비로봇) 배제
       normalEvents = normalEvents.filter(ev => ev.id !== "ev_82" && ev.id !== "ev_83" && ev.id !== "ev_84");
@@ -1771,6 +1786,10 @@ function chooseBypassOption(opt) {
     }
   }
   
+  if (opt.nextChainEventId) {
+    state.activeChainEventId = opt.nextChainEventId;
+  }
+  
   state.eventChosen = true;
   state.currentEvent.chosenResultText = opt.resultText;
   
@@ -1794,6 +1813,10 @@ function chooseEventOption(optIdx) {
     for (const [stat, val] of Object.entries(opt.effect)) {
       state[stat] = Math.min(100, Math.max(0, state[stat] + val));
     }
+  }
+  
+  if (opt.nextChainEventId) {
+    state.activeChainEventId = opt.nextChainEventId;
   }
   
   // 아이템 보상 지급
