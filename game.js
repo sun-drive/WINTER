@@ -2528,6 +2528,12 @@ window.awakenPet = function(petIdx) {
 
 // 5. 전투 시스템 제어부
 function triggerCombat(monsterData) {
+  // 만약 플레이어가 이미 사망한 상태라면 전투를 진행하지 않고 즉시 게임오버 처리
+  if (state.health <= 0) {
+    triggerGameOver();
+    return;
+  }
+  
   discoverMonster(monsterData.id); // 도감 발견 처리
   combatState.active = true;
   combatState.petSkillUsed = false;
@@ -3002,7 +3008,11 @@ function endCombat() {
   combatState.monster = null;
   
   DOM.combatScreen.classList.remove("active");
-  DOM.gameScreen.classList.add("active");
+  
+  // 플레이어가 생존해 있을 때만 게임 화면을 다시 활성화합니다.
+  if (state.health > 0) {
+    DOM.gameScreen.classList.add("active");
+  }
   
   updateUI();
   saveGame();
