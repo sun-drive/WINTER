@@ -379,7 +379,19 @@ const DOM = {
   merchantTabSell: document.getElementById("merchant-tab-sell"),
   merchantItemList: document.getElementById("merchant-item-list"),
   merchantCloseBtn: document.getElementById("merchant-close-btn"),
-  merchantCloseX: document.getElementById("merchant-modal-close-x")
+  merchantCloseX: document.getElementById("merchant-modal-close-x"),
+
+  // 설정 및 Safe Area 조절
+  startSettingsBtn: document.getElementById("start-settings-btn"),
+  settingsBtn: document.getElementById("settings-btn"),
+  settingsModal: document.getElementById("settings-modal"),
+  adjustRatioBtn: document.getElementById("adjust-ratio-btn"),
+  settingsCloseBtn: document.getElementById("settings-close-btn"),
+  safeAreaAdjuster: document.getElementById("safe-area-adjuster"),
+  adjusterConfirmBtn: document.getElementById("adjuster-confirm-btn"),
+  adjusterResetBtn: document.getElementById("adjuster-reset-btn"),
+  adjusterCancelBtn: document.getElementById("adjuster-cancel-btn"),
+  safeAreaBox: document.getElementById("safe-area-box")
 };
 
 // 선택된 인벤토리 슬롯 인덱스 및 장비 슬롯 정보 저장
@@ -3808,7 +3820,193 @@ window.addEventListener("load", () => {
       fileInput.value = "";
     });
   }
+
+  // Safe Area 초기화 호출
+  initSafeArea();
 });
+
+// --- 화면 비율 및 Safe Area 조정 로직 ---
+let safeArea = { top: 0, bottom: 0, left: 0, right: 0 };
+let tempSafeArea = { top: 0, bottom: 0, left: 0, right: 0 };
+
+function initSafeArea() {
+  // 로컬 스토리지 데이터 로드
+  const saved = localStorage.getItem("frostbite_safe_area");
+  if (saved) {
+    try {
+      safeArea = JSON.parse(saved);
+    } catch(e) {
+      console.error("Safe area 로드 실패:", e);
+    }
+  }
+  applySafeArea(safeArea);
+  
+  // 설정 관련 버튼 리스너 바인딩
+  if (DOM.startSettingsBtn) {
+    DOM.startSettingsBtn.addEventListener("click", openSettingsModal);
+  }
+  if (DOM.settingsBtn) {
+    DOM.settingsBtn.addEventListener("click", openSettingsModal);
+  }
+  if (DOM.settingsCloseBtn) {
+    DOM.settingsCloseBtn.addEventListener("click", closeSettingsModal);
+  }
+  if (DOM.settingsModal) {
+    DOM.settingsModal.addEventListener("click", (e) => {
+      if (e.target === DOM.settingsModal) closeSettingsModal();
+    });
+  }
+  if (DOM.adjustRatioBtn) {
+    DOM.adjustRatioBtn.addEventListener("click", startSafeAreaAdjust);
+  }
+  if (DOM.adjusterConfirmBtn) {
+    DOM.adjusterConfirmBtn.addEventListener("click", confirmSafeAreaAdjust);
+  }
+  if (DOM.adjusterResetBtn) {
+    DOM.adjusterResetBtn.addEventListener("click", resetSafeAreaAdjust);
+  }
+  if (DOM.adjusterCancelBtn) {
+    DOM.adjusterCancelBtn.addEventListener("click", cancelSafeAreaAdjust);
+  }
+
+  // 드래그 핸들 이벤트 바인딩
+  bindSafeAreaDragEvents();
+
+  // 조정 레이어 자체의 모바일 터치 스크롤 기본동작 방지
+  if (DOM.safeAreaAdjuster) {
+    DOM.safeAreaAdjuster.addEventListener("touchmove", (e) => {
+      e.preventDefault();
+    }, { passive: false });
+  }
+}
+
+function applySafeArea(cfg) {
+  // CSS 변수에 값 반영
+  document.documentElement.style.setProperty("--safe-top", `${cfg.top}px`);
+  document.documentElement.style.setProperty("--safe-bottom", `${cfg.bottom}px`);
+  document.documentElement.style.setProperty("--safe-left", `${cfg.left}px`);
+  document.documentElement.style.setProperty("--safe-right", `${cfg.right}px`);
+}
+
+function openSettingsModal() {
+  if (DOM.settingsModal) {
+    DOM.settingsModal.classList.remove("hidden");
+  }
+}
+
+function closeSettingsModal() {
+  if (DOM.settingsModal) {
+    DOM.settingsModal.classList.add("hidden");
+  }
+}
+
+function startSafeAreaAdjust() {
+  closeSettingsModal();
+  document.body.classList.add("adjusting-safe-area");
+  window.scrollTo(0, 0);
+  
+  // 애초에 UI가 보이지 않아 조절이 불가능한 상황을 방지하기 위해,
+  // 조정 화면에 들어가면 강제로 0.5 배율 크기 (상하좌우 25% 여백)에서 시작하게 합니다.
+  tempSafeArea = {
+    top: Math.floor(window.innerHeight * 0.25),
+    bottom: Math.floor(window.innerHeight * 0.25),
+    left: Math.floor(window.innerWidth * 0.25),
+    right: Math.floor(window.innerWidth * 0.25)
+  };
+  
+  applySafeArea(tempSafeArea);
+  if (DOM.safeAreaAdjuster) {
+    DOM.safeAreaAdjuster.classList.remove("hidden");
+  }
+}
+
+function confirmSafeAreaAdjust() {
+  safeArea = { ...tempSafeArea };
+  localStorage.setItem("frostbite_safe_area", JSON.stringify(safeArea));
+  applySafeArea(safeArea);
+  document.body.classList.remove("adjusting-safe-area");
+  if (DOM.safeAreaAdjuster) {
+    DOM.safeAreaAdjuster.classList.add("hidden");
+  }
+  showToast("화면 비율 설정이 저장되었습니다.", "success");
+}
+
+function resetSafeAreaAdjust() {
+  tempSafeArea = { top: 0, bottom: 0, left: 0, right: 0 };
+  applySafeArea(tempSafeArea);
+  showToast("여백 설정이 초기화되었습니다. 적용 완료를 누르셔야 반영됩니다.", "info");
+}
+
+function cancelSafeAreaAdjust() {
+  applySafeArea(safeArea);
+  document.body.classList.remove("adjusting-safe-area");
+  if (DOM.safeAreaAdjuster) {
+    DOM.safeAreaAdjuster.classList.add("hidden");
+  }
+  showToast("비율 조정을 취소했습니다.", "info");
+}
+
+function bindSafeAreaDragEvents() {
+  const handles = document.querySelectorAll(".safe-handle");
+  handles.forEach(handle => {
+    const direction = handle.getAttribute("data-handle");
+    
+    const onStart = (e) => {
+      e.preventDefault();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      
+      const startX = clientX;
+      const startY = clientY;
+      const startVal = tempSafeArea[direction] || 0;
+      
+      const onMove = (moveEv) => {
+        const moveClientX = moveEv.touches ? moveEv.touches[0].clientX : moveEv.clientX;
+        const moveClientY = moveEv.touches ? moveEv.touches[0].clientY : moveEv.clientY;
+        
+        const dx = moveClientX - startX;
+        const dy = moveClientY - startY;
+        
+        let newVal = startVal;
+        
+        if (direction === "top") {
+          newVal = startVal + dy;
+          const maxVal = window.innerHeight * 0.35;
+          tempSafeArea.top = Math.max(0, Math.min(maxVal, newVal));
+        } else if (direction === "bottom") {
+          newVal = startVal - dy;
+          const maxVal = window.innerHeight * 0.35;
+          tempSafeArea.bottom = Math.max(0, Math.min(maxVal, newVal));
+        } else if (direction === "left") {
+          newVal = startVal + dx;
+          const maxVal = window.innerWidth * 0.35;
+          tempSafeArea.left = Math.max(0, Math.min(maxVal, newVal));
+        } else if (direction === "right") {
+          newVal = startVal - dx;
+          const maxVal = window.innerWidth * 0.35;
+          tempSafeArea.right = Math.max(0, Math.min(maxVal, newVal));
+        }
+        
+        applySafeArea(tempSafeArea);
+      };
+      
+      const onEnd = () => {
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseup", onEnd);
+        document.removeEventListener("touchmove", onMove);
+        document.removeEventListener("touchend", onEnd);
+      };
+      
+      document.addEventListener("mousemove", onMove);
+      document.addEventListener("mouseup", onEnd);
+      document.addEventListener("touchmove", onMove, { passive: false });
+      document.addEventListener("touchend", onEnd);
+    };
+    
+    handle.addEventListener("mousedown", onStart);
+    handle.addEventListener("touchstart", onStart, { passive: false });
+  });
+}
 
 
 

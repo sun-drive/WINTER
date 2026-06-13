@@ -13,42 +13,47 @@
 <body>
     <div class="background-overlay"></div>
     
-    <!-- 시작 화면 -->
-    <div id="start-screen" class="screen active">
-        <div class="glass-card start-card">
-            <h1 class="game-title">FROSTBITE</h1>
-            <p class="game-subtitle">극지 생존기</p>
-            <div class="divider"></div>
-            <p class="game-desc">
-                끝없는 눈보라와 매서운 추위가 몰아치는 고립된 극지대.<br>
-                당신은 구조대가 올 때까지 살아남아야 합니다.<br>
-                자원을 탐색하고, 도구를 제작하며, 시시각각 찾아오는 위협에 대처하십시오.
-            </p>
-            <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 280px; margin: 0 auto;">
-                <button id="start-btn" class="btn btn-primary" style="width: 100%;">생존 시작하기</button>
-                <div style="display: flex; gap: 8px; width: 100%;">
-                    <button id="start-archive-btn" class="btn btn-small btn-info" style="flex: 1; font-weight: 700;">📖 아카이브</button>
-                    <button id="start-import-btn" class="btn btn-small btn-secondary" style="flex: 1; font-weight: 700;">📂 복구(.js)</button>
+    <!-- 뷰포트 영역 래퍼 (이 래퍼의 크기를 동적으로 조절하여 UI가 잘리지 않게 함) -->
+    <div id="viewport-wrapper">
+        
+        <!-- 시작 화면 -->
+        <div id="start-screen" class="screen active">
+            <div class="glass-card start-card">
+                <h1 class="game-title">FROSTBITE</h1>
+                <p class="game-subtitle">극지 생존기</p>
+                <div class="divider"></div>
+                <p class="game-desc">
+                    끝없는 눈보라와 매서운 추위가 몰아치는 고립된 극지대.<br>
+                    당신은 구조대가 올 때까지 살아남아야 합니다.<br>
+                    자원을 탐색하고, 도구를 제작하며, 시시각각 찾아오는 위협에 대처하십시오.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 280px; margin: 0 auto;">
+                    <button id="start-btn" class="btn btn-primary" style="width: 100%;">생존 시작하기</button>
+                    <div style="display: flex; gap: 6px; width: 100%;">
+                        <button id="start-archive-btn" class="btn btn-small btn-info" style="flex: 1; font-weight: 700; font-size: 0.72rem; padding: 6px 2px;">📖 아카이브</button>
+                        <button id="start-settings-btn" class="btn btn-small btn-secondary" style="flex: 1; font-weight: 700; font-size: 0.72rem; padding: 6px 2px;">⚙️ 설정</button>
+                        <button id="start-import-btn" class="btn btn-small btn-secondary" style="flex: 1; font-weight: 700; font-size: 0.72rem; padding: 6px 2px;">📂 복구</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 게임 화면 -->
-    <div id="game-screen" class="screen">
-        <header class="game-header">
-            <div class="header-left">
-                <span class="logo">FROSTBITE</span>
-            </div>
-            <div class="header-right" style="display: flex; align-items: center; gap: 8px;">
-                <div class="day-counter" style="margin-right: 4px;">SURVIVED: <span id="day-val">1</span> DAY</div>
-                <button id="archive-btn" class="btn btn-small btn-info" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 700;">📖 아카이브</button>
-                <button id="export-save-btn" class="btn btn-small btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.05) !important;">💾 백업(.js)</button>
-                <button id="import-save-btn" class="btn btn-small btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.05) !important;">📂 복구(.js)</button>
-                <input type="file" id="save-file-input" accept=".js" style="display: none;">
-                <button id="reset-btn" class="btn btn-small btn-danger" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 700; background: linear-gradient(135deg, var(--color-danger) 0%, #c0392b 100%) !important;">🔄 리셋</button>
-            </div>
-        </header>
+        <!-- 게임 화면 -->
+        <div id="game-screen" class="screen">
+            <header class="game-header">
+                <div class="header-left">
+                    <span class="logo">FROSTBITE</span>
+                </div>
+                <div class="header-right" style="display: flex; align-items: center; gap: 8px;">
+                    <div class="day-counter" style="margin-right: 4px;">SURVIVED: <span id="day-val">1</span> DAY</div>
+                    <button id="archive-btn" class="btn btn-small btn-info" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 700;">📖 아카이브</button>
+                    <button id="export-save-btn" class="btn btn-small btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.05) !important;">💾 백업(.js)</button>
+                    <button id="import-save-btn" class="btn btn-small btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.05) !important;">📂 복구(.js)</button>
+                    <input type="file" id="save-file-input" accept=".js" style="display: none;">
+                    <button id="settings-btn" class="btn btn-small btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.05) !important;">⚙️ 설정</button>
+                    <button id="reset-btn" class="btn btn-small btn-danger" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 700; background: linear-gradient(135deg, var(--color-danger) 0%, #c0392b 100%) !important;">🔄 리셋</button>
+                </div>
+            </header>
 
         <main class="game-container">
             <!-- 왼쪽: 상태 수치 & 주요 행동 -->
@@ -227,7 +232,6 @@
                 </div>
             </section>
         </main>
-    </div>
 
     <!-- 전투 화면 -->
     <div id="combat-screen" class="screen">
@@ -290,7 +294,7 @@
     </div>
 
     <!-- 연구(생각하기) 레시피 선택기 오버레이 -->
-    <div id="research-selector-modal" class="combat-item-selector hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 350px; background: rgba(10, 15, 30, 0.95); border: 1px solid var(--color-primary); border-radius: 10px; padding: 20px; z-index: 100;">
+    <div id="research-selector-modal" class="combat-item-selector hidden" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 350px; background: rgba(10, 15, 30, 0.95); border: 1px solid var(--color-primary); border-radius: 10px; padding: 20px; z-index: 100;">
         <h3>도안 생각하기 (연구)</h3>
         <p style="font-size:0.75rem; text-align:center; margin-bottom:12px; color:var(--color-text-sub); line-height:1.4;">재료종류 반절 이상을 보유한 잠긴 도안 목록입니다.<br>도출 시 정신력 -8, 허기 -5가 소모됩니다.</p>
         <div id="research-item-list" class="combat-item-list" style="max-height: 200px; overflow-y: auto;"></div>
@@ -298,7 +302,7 @@
     </div>
 
     <!-- 배낭 공간 부족 교체/버리기 모달 -->
-    <div id="discard-selector-modal" class="combat-item-selector hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 350px; background: rgba(10, 15, 30, 0.95); border: 1px solid var(--color-danger); border-radius: 10px; padding: 20px; z-index: 100;">
+    <div id="discard-selector-modal" class="combat-item-selector hidden" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 350px; background: rgba(10, 15, 30, 0.95); border: 1px solid var(--color-danger); border-radius: 10px; padding: 20px; z-index: 100;">
         <h3 id="discard-modal-title" style="color: var(--color-danger);">배낭 공간 부족</h3>
         <p id="discard-modal-desc" style="font-size:0.75rem; text-align:center; margin-bottom:12px; color:var(--color-text-sub); line-height:1.4;">
             배낭에 공간이 없습니다. 버릴 물건을 선택하세요.
@@ -310,7 +314,7 @@
     </div>
 
     <!-- 극지 상인 거래 모달 -->
-    <div id="merchant-selector-modal" class="combat-item-selector hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 420px; max-height: 85%; background: rgba(10, 15, 30, 0.98); border: 2px solid var(--color-primary); border-radius: 12px; padding: 20px; z-index: 100; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);">
+    <div id="merchant-selector-modal" class="combat-item-selector hidden" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 420px; max-height: 85%; background: rgba(10, 15, 30, 0.98); border: 2px solid var(--color-primary); border-radius: 12px; padding: 20px; z-index: 100; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <h3 style="color: var(--color-primary); margin: 0; font-size: 1.1rem; text-align: left;">🤝 극지 상인의 교역소</h3>
             <button id="merchant-modal-close-x" style="background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--color-text-sub); transition: var(--transition-smooth);" onmouseover="this.style.color='#fff';" onmouseout="this.style.color='var(--color-text-sub)';">❌</button>
@@ -332,7 +336,7 @@
     </div>
     
     <!-- 아카이브 (도감 / 도전과제) 모달 -->
-    <div id="archive-modal" class="combat-item-selector hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; max-height: 85%; background: rgba(10, 15, 30, 0.98); border: 2px solid var(--color-primary); border-radius: 12px; padding: 20px; z-index: 110; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);">
+    <div id="archive-modal" class="combat-item-selector hidden" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; max-height: 85%; background: rgba(10, 15, 30, 0.98); border: 2px solid var(--color-primary); border-radius: 12px; padding: 20px; z-index: 110; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <h3 style="color: var(--color-primary); margin: 0; font-size: 1.1rem; text-align: left;">📖 극지 생존 기록 보관소 (아카이브)</h3>
             <button id="archive-modal-close-x" style="background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--color-text-sub); transition: var(--transition-smooth);" onmouseover="this.style.color='#fff';" onmouseout="this.style.color='var(--color-text-sub)';">❌</button>
@@ -392,6 +396,48 @@
             </div>
         </div>
     </div>
+    
+    <!-- 설정 모달 -->
+    <div id="settings-modal" class="modal-overlay hidden">
+        <div class="glass-card settings-card" style="width: 90%; max-width: 380px; text-align: center; display: flex; flex-direction: column; gap: 15px; background: rgba(15, 23, 42, 0.95); border: 1px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);">
+            <h3 style="color: var(--color-primary); font-size: 1.2rem; margin-bottom: 5px;">⚙️ 설정</h3>
+            <p style="font-size: 0.8rem; color: var(--color-text-sub); line-height: 1.4;">
+                모바일이나 패드 화면에서 UI가 잘릴 경우,<br>아래 버튼을 눌러 여백 영역을 조정할 수 있습니다.
+            </p>
+            <button id="adjust-ratio-btn" class="btn btn-primary" style="width: 100%;">🖥️ 화면 비율/여백 수정</button>
+            <button id="settings-close-btn" class="btn btn-secondary" style="width: 100%;">닫기</button>
+        </div>
+    </div>
+
+    <!-- 화면 비율 조정 가이드 레이어 (Safe Area Adjuster) -->
+    <div id="safe-area-adjuster" class="hidden">
+        <!-- 중앙 안전 영역 가이드 박스 -->
+        <div id="safe-area-box">
+            <!-- 상하좌우 조절 핸들 -->
+            <div class="safe-handle handle-top" data-handle="top">
+                <div class="handle-bar horizontal"></div>
+            </div>
+            <div class="safe-handle handle-bottom" data-handle="bottom">
+                <div class="handle-bar horizontal"></div>
+            </div>
+            <div class="safe-handle handle-left" data-handle="left">
+                <div class="handle-bar vertical"></div>
+            </div>
+            <div class="safe-handle handle-right" data-handle="right">
+                <div class="handle-bar vertical"></div>
+            </div>
+            <div class="safe-area-tooltip">핸들을 드래그하여 화면 여백을 조절하세요</div>
+        </div>
+        
+        <!-- 하단 제어 패널 -->
+        <div class="adjuster-control-panel">
+            <button id="adjuster-confirm-btn" class="btn btn-primary btn-small">적용 완료</button>
+            <button id="adjuster-reset-btn" class="btn btn-secondary btn-small">기본값 복원</button>
+            <button id="adjuster-cancel-btn" class="btn btn-danger btn-small">취소</button>
+        </div>
+    </div>
+
+    </div> <!-- viewport-wrapper 닫기 -->
 
     <script src="events.js"></script>
     <script src="game.js"></script>
