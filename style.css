@@ -1506,12 +1506,12 @@ body::after {
 /* 뷰포트 영역 래퍼 스타일 */
 #viewport-wrapper {
     position: absolute;
-    top: var(--safe-top, 0px);
-    bottom: var(--safe-bottom, 0px);
-    left: var(--safe-left, 0px);
-    right: var(--safe-right, 0px);
-    width: auto;
-    height: auto;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    transform-origin: top left;
+    transform: translate(var(--safe-left, 0px), var(--safe-top, 0px)) scale(var(--safe-scale-x, 1), var(--safe-scale-y, 1));
     background: transparent;
     display: flex;
     flex-direction: column;
