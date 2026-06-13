@@ -17,6 +17,10 @@ const ITEM_DATABASE = {
   water: { name: "깨끗한 물", icon: "💧", desc: "눈을 끓여 만든 안전한 식수. 포만감과 체온을 미량 회복시킨다.", usable: true, effect: { hunger: 10, warmth: 15, health: 5, sanity: 5 }, type: "음식" },
   raw_meat: { name: "생고기", icon: "🥩", desc: "야생동물에게서 얻은 날고기. 그냥 먹으면 탈이 날 위험이 큽니다.", usable: true, effect: { hunger: 15, health: -10, warmth: -5, sanity: -10 }, type: "음식" },
   cooked_meat: { name: "구운 고기", icon: "🍖", desc: "불에 노릇하게 구워낸 고기. 든든하게 배를 채우고 체력을 줍니다.", usable: true, effect: { hunger: 45, health: 15, warmth: 10, sanity: 10 }, type: "음식" },
+  fish: { name: "얼음 물고기", icon: "🐟", desc: "빙판 아래에서 낚아올린 펄떡이는 물고기. 조리하면 유용한 식량이 됩니다.", usable: true, effect: { hunger: 20, health: -5, warmth: -2, sanity: -5 }, type: "음식" },
+  cooked_fish: { name: "구운 물고기", icon: "🍢", desc: "노릇하게 구워 낸 향긋한 생선구이. (포만감 +35, 체온 +10, 체력 +10)", usable: true, effect: { hunger: 35, warmth: 10, health: 10, sanity: 15 }, type: "음식" },
+  egg: { name: "야생 새알", icon: "🥚", desc: "추위를 뚫고 발견한 영양가 높은 새의 알. 조리해 단백질을 보충할 수 있습니다.", usable: true, effect: { hunger: 15, health: 5, warmth: 2, sanity: 2 }, type: "음식" },
+  boiled_egg: { name: "삶은 새알", icon: "🍳", desc: "따뜻하게 삶아낸 새알 요리. (포만감 +30, 체력 +15)", usable: true, effect: { hunger: 30, health: 15, warmth: 10, sanity: 10 }, type: "음식" },
   hide: { name: "짐승 가죽", icon: "🐺", image: "images/hide.png", desc: "야생동물의 털가죽. 텐트나 방한용 피복의 주원료.", usable: false, type: "재료" },
   metal: { name: "고철 조각", icon: "🔩", image: "images/metal.png", desc: "난파선이나 기지 잔해에서 뜯어낸 튼튼한 쇳조각.", usable: false, type: "재료" },
   herb: { name: "약초", icon: "🌿", image: "images/herb.png", desc: "추위를 견디며 자란 희귀한 치료 풀잎. 상처를 가볍게 치유합니다.", usable: true, effect: { health: 10, sanity: 5 }, type: "의료품" },
@@ -125,6 +129,8 @@ const CRAFTING_RECIPES = {
   // 기본 조합법 (처음부터 해금됨)
   water: { name: "깨끗한 물", cost: { snow: 1, wood: 1, matches: 1 }, resultQty: 1, locked: false },
   cooked_meat: { name: "구운 고기", cost: { raw_meat: 1, wood: 1, matches: 1 }, resultQty: 1, locked: false },
+  cooked_fish: { name: "구운 물고기", cost: { fish: 1, wood: 1, matches: 1 }, resultQty: 1, locked: false },
+  boiled_egg: { name: "삶은 새알", cost: { egg: 2, water: 1, wood: 1 }, resultQty: 1, locked: false },
   campfire: { name: "모닥불", cost: { wood: 3, matches: 1 }, resultQty: 1, locked: false },
   herb_tea: { name: "약초 달인 차", cost: { water: 1, herb: 1, matches: 1 }, resultQty: 1, locked: false },
 
@@ -1794,6 +1800,11 @@ function chooseEventOption(optIdx) {
   if (opt.rewardItem) {
     addToInventory(opt.rewardItem.id, opt.rewardItem.qty);
   }
+  if (opt.rewardItems && Array.isArray(opt.rewardItems)) {
+    opt.rewardItems.forEach(item => {
+      addToInventory(item.id, item.qty);
+    });
+  }
   
   // 펫 길들이기 수행
   if (opt.tamePet) {
@@ -3037,6 +3048,10 @@ const ITEM_VALUES = {
   water: { buy: 12, sell: 6 },
   raw_meat: { buy: 15, sell: 7 },
   cooked_meat: { buy: 30, sell: 15 },
+  fish: { buy: 20, sell: 9 },
+  cooked_fish: { buy: 40, sell: 18 },
+  egg: { buy: 15, sell: 7 },
+  boiled_egg: { buy: 30, sell: 14 },
   hide: { buy: 22, sell: 10 },
   metal: { buy: 22, sell: 10 },
   herb: { buy: 25, sell: 12 },

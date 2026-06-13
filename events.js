@@ -386,7 +386,7 @@ const survivalEvents = [
         requiredItem: "spear",
         consumeItem: false,
         effect: { health: 0, warmth: -10, hunger: -10, sanity: 5 },
-        rewardItem: { id: "raw_meat", qty: 2 },
+        rewardItem: { id: "fish", qty: 2 },
         resultText: "창 끝으로 얇은 얼음 결을 정확하게 파고들어 펄떡이는 물고기를 두 마리 낚았습니다."
       }
     ]
@@ -873,7 +873,7 @@ const survivalEvents = [
       {
         text: "알과 새 사체를 가져가 요리한다 (새알 및 고기 획득)",
         effect: { health: 0, warmth: -10, hunger: -5, sanity: -5 },
-        rewardItem: { id: "raw_meat", qty: 1 },
+        rewardItems: [{ id: "raw_meat", qty: 1 }, { id: "egg", qty: 2 }],
         resultText: "가혹한 극지의 현실을 인지하며 식재료로 쓸 조류 사체와 알을 배낭에 거둡니다."
       },
       {
