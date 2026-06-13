@@ -3881,22 +3881,11 @@ function initSafeArea() {
 }
 
 function applySafeArea(cfg) {
-  const W = window.innerWidth;
-  const H = window.innerHeight;
-  
-  // 가이드 여백 적용 후 남은 안전 영역 크기를 기반으로 scale 비율 계산
-  const scaleX = W > 0 ? (W - cfg.left - cfg.right) / W : 1;
-  const scaleY = H > 0 ? (H - cfg.top - cfg.bottom) / H : 1;
-  
   // CSS 변수에 값 반영
   document.documentElement.style.setProperty("--safe-top", `${cfg.top}px`);
   document.documentElement.style.setProperty("--safe-bottom", `${cfg.bottom}px`);
   document.documentElement.style.setProperty("--safe-left", `${cfg.left}px`);
   document.documentElement.style.setProperty("--safe-right", `${cfg.right}px`);
-  
-  // 스케일 축소 값 반영
-  document.documentElement.style.setProperty("--safe-scale-x", scaleX);
-  document.documentElement.style.setProperty("--safe-scale-y", scaleY);
 }
 
 function openSettingsModal() {

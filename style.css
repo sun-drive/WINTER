@@ -99,7 +99,7 @@ body::after {
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid var(--border-glass);
     border-radius: 12px;
-    padding: 24px;
+    padding: 12px 14px;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     transition: var(--transition-smooth);
 }
@@ -202,7 +202,7 @@ body::after {
 /* 메인 게임 화면 레이아웃 */
 #game-screen {
     justify-content: flex-start;
-    padding: 20px;
+    padding: 8px 10px;
     overflow-y: auto;
 }
 
@@ -212,8 +212,8 @@ body::after {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding: 10px 0;
+    margin-bottom: 8px;
+    padding: 4px 0;
 }
 
 .logo {
@@ -238,16 +238,16 @@ body::after {
 .game-container {
     display: grid;
     grid-template-columns: 320px 1fr 380px;
-    gap: 20px;
+    gap: 10px;
     width: 100%;
     max-width: 1360px;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 65px);
 }
 
 .left-panel, .right-panel {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
     overflow-y: auto;
     max-height: 100%;
     padding-right: 4px;
@@ -271,10 +271,10 @@ body::after {
 
 /* 섹션 타이틀 */
 .section-title {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     font-weight: 700;
-    margin-bottom: 16px;
-    letter-spacing: 1px;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
     color: var(--color-primary);
     border-left: 3px solid var(--color-primary);
     padding-left: 8px;
@@ -286,7 +286,7 @@ body::after {
 }
 
 .stat-group {
-    margin-bottom: 16px;
+    margin-bottom: 8px;
 }
 
 .stat-group:last-child {
@@ -356,9 +356,9 @@ body::after {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border-glass);
     color: var(--color-text-main);
-    padding: 12px;
+    padding: 8px 10px;
     border-radius: 8px;
-    gap: 12px;
+    gap: 8px;
     width: 100%;
 }
 
@@ -369,10 +369,10 @@ body::after {
 }
 
 .btn-action .btn-icon {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     background: rgba(255, 255, 255, 0.05);
-    width: 42px;
-    height: 42px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -385,12 +385,12 @@ body::after {
 }
 
 .btn-action strong {
-    font-size: 0.9rem;
-    margin-bottom: 2px;
+    font-size: 0.82rem;
+    margin-bottom: 1px;
 }
 
 .btn-action small {
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     color: var(--color-text-sub);
 }
 
@@ -446,24 +446,24 @@ body::after {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 24px;
+    padding: 14px 18px;
     overflow-y: auto;
 }
 
 .event-title {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     color: var(--color-text-main);
     letter-spacing: 0.5px;
 }
 
 .event-description {
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 0.9rem;
+    line-height: 1.5;
     color: var(--color-text-sub);
     flex: 1;
-    margin-bottom: 24px;
+    margin-bottom: 12px;
     white-space: pre-wrap; /* 줄바꿈 허용 */
 }
 
@@ -478,9 +478,9 @@ body::after {
     border: 1px solid var(--border-glass);
     color: var(--color-text-main);
     text-align: left;
-    padding: 12px 18px;
+    padding: 8px 12px;
     border-radius: 6px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     transition: var(--transition-smooth);
     width: 100%;
     display: block;
@@ -509,8 +509,8 @@ body::after {
 
 .inventory-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
     overflow-y: auto;
     flex: 1;
     margin-bottom: 10px;
@@ -612,7 +612,7 @@ body::after {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid var(--border-glass);
     border-radius: 6px;
-    padding: 10px;
+    padding: 6px 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -626,22 +626,22 @@ body::after {
 .craft-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
 }
 
 .craft-name {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
 }
 
 .craft-cost {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     color: var(--color-text-sub);
 }
 
 .btn-craft {
-    font-size: 0.75rem;
-    padding: 6px 12px;
+    font-size: 0.72rem;
+    padding: 4px 8px;
 }
 
 /* 종료 화면 */
@@ -810,25 +810,25 @@ body::after {
 }
 
 .equip-slot-icon {
-    font-size: 2.2rem;
-    margin-top: 8px;
+    font-size: 1.6rem;
+    margin-top: 10px;
 }
 
 /* 펫 카드 */
 .pet-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .pet-item {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border-glass);
     border-radius: 6px;
-    padding: 10px;
+    padding: 6px 8px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .pet-avatar {
@@ -1506,12 +1506,12 @@ body::after {
 /* 뷰포트 영역 래퍼 스타일 */
 #viewport-wrapper {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    transform-origin: top left;
-    transform: translate(var(--safe-left, 0px), var(--safe-top, 0px)) scale(var(--safe-scale-x, 1), var(--safe-scale-y, 1));
+    top: var(--safe-top, 0px);
+    bottom: var(--safe-bottom, 0px);
+    left: var(--safe-left, 0px);
+    right: var(--safe-right, 0px);
+    width: auto;
+    height: auto;
     background: transparent;
     display: flex;
     flex-direction: column;
